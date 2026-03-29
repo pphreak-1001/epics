@@ -13,7 +13,6 @@ function AudioSignup({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [processingStep, setProcessingStep] = useState('');
   const [error, setError] = useState('');
-  const [audioBlob, setAudioBlob] = useState(null);
   const [recordingTime, setRecordingTime] = useState(0);
   
   const mediaRecorderRef = useRef(null);
@@ -70,7 +69,7 @@ function AudioSignup({ onClose, onSuccess }) {
         stream.getTracks().forEach(track => track.stop());
         
         // Process the audio
-        await processAudio(audioBlob);
+        await processAudio(blob);
       };
 
       mediaRecorderRef.current.start(1000); // Collect data every second
@@ -196,7 +195,6 @@ function AudioSignup({ onClose, onSuccess }) {
   const resetRecording = () => {
     setTranscription('');
     setParsedData(null);
-    setAudioBlob(null);
     setError('');
     setRecordingTime(0);
   };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LogOut, Plus, Users, Briefcase, X, MapPin, DollarSign, Phone, Star, TrendingUp } from 'lucide-react';
+import { LogOut, Plus, Users, Briefcase, X, MapPin, DollarSign, Phone, Star } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api';
 
 function EmployerDashboard({ user, onLogout }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [myJobs, setMyJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showJobForm, setShowJobForm] = useState(false);

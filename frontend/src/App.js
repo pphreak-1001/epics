@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import LandingPage from './components/LandingPage';
 import WorkerDashboard from './components/WorkerDashboard';
@@ -14,11 +14,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -34,7 +30,11 @@ function App() {
       }
     }
     setLoading(false);
-  };
+  }, [i18n]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');

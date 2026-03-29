@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, Briefcase, Target, MessageSquare, Mic, FileText, Phone, Sparkles, Award, TrendingUp } from 'lucide-react';
+import { Users, Briefcase, Target, MessageSquare, Mic, FileText, Phone, Sparkles, Award } from 'lucide-react';
 import AuthModal from './AuthModal';
 import ChatbotSignup from './ChatbotSignup';
 import AudioSignup from './AudioSignup';
@@ -370,15 +370,15 @@ function LandingPage({ onLogin }) {
             <p className="text-2xl text-gray-400 mb-10 font-semibold">{t('tagline')}</p>
             
             <div className="flex justify-center space-x-8 mb-10">
-              <a href="#" className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110">
+              <button className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110 bg-transparent border-0 cursor-pointer">
                 {t('aboutUs')}
-              </a>
-              <a href="#" className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110">
+              </button>
+              <button className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110 bg-transparent border-0 cursor-pointer">
                 {t('contact')}
-              </a>
-              <a href="#" className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110">
+              </button>
+              <button className="text-gray-400 hover:text-saffron transition-colors text-lg font-medium transform hover:scale-110 bg-transparent border-0 cursor-pointer">
                 {t('helpline')}
-              </a>
+              </button>
             </div>
             
             <div className="border-t border-gray-700 pt-8 mb-6">
