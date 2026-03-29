@@ -63,13 +63,12 @@ function AudioSignup({ onClose, onSuccess }) {
 
       mediaRecorderRef.current.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        setAudioBlob(audioBlob);
         
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
         
         // Process the audio
-        await processAudio(blob);
+        await processAudio(audioBlob);
       };
 
       mediaRecorderRef.current.start(1000); // Collect data every second
