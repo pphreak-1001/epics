@@ -1,0 +1,21 @@
+const ta = {
+  translation: {
+    appName: "கிராமீண் ரோஸ்கார்", tagline: "உங்கள் வீட்டில் வேலை", subtitle: "இந்தியா முழுவதும் தினசரி கூலி தொழிலாளர்களை உள்ளூர் வாய்ப்புகளுடன் இணைக்கிறது",
+    home: "முகப்பு", findWork: "வேலை தேடு", postJob: "வேலை இடுகை", login: "உள்நுழை", register: "பதிவு செய்", logout: "வெளியேறு", myProfile: "என் சுயவிவரம்", myJobs: "என் வேலைகள்",
+    heroTitle: "உங்களுக்கு அருகில் வேலை, உங்களுக்கு நியாயமான ஊதியம்", heroSubtitle: "இடைத்தரகர்கள் இல்லை. குழப்பம் இல்லை. நேர்மையான வேலை மட்டும்.", getStarted: "தொடங்குங்கள்", tollFreeText: "கட்டணமில்லா உதவி எண்:", callForRegistration: "ஆடியோ அடிப்படையிலான பதிவுக்கு அழைக்கவும்",
+    features: "இது எவ்வாறு செயல்படுகிறது", featureWorker: "தொழிலாளர்களுக்கு", featureWorkerDesc: "உங்கள் மொழியில் பதிவு செய்யுங்கள், அருகில் வேலை கண்டறியுங்கள்", featureEmployer: "முதలాளிகளுக்கு", featureEmployerDesc: "வேலைகளை இடுகையிடுங்கள், திறமையான தொழிலாளர்களைக் கண்டறியுங்கள்", featureMatching: "ஸ்மார்ட் பொருத்தம்", featureMatchingDesc: "இடம், திறன் மற்றும் ஊதியம் அடிப்படையில்",
+    signupTitle: "பதிவு செய்ய மூன்று எளிய வழிகள்", signupChooseMethod: "உங்களுக்கு சிறந்த முறையைத் தேர்ந்தெடுக்கவும்", signupNormal: "சாதாரண பதிவு", signupNormalDesc: "எளிய படிவத்தை நிரப்பவும்", signupChatbot: "சாட்பாட் பதிவு", signupChatbotDesc: "சில கேள்விகளுக்கு பதிலளிக்கவும்", signupAudio: "ஆடியோ பதிவு", signupAudioDesc: "உங்கள் விவரங்களை கூறுங்கள்",
+    mason: "கொத்தனார்", labour: "கூலி", plumber: "பிளம்பர்", electrician: "எலக்ட்ரீஷியன்", painter: "பெயிண்டர்",
+    name: "பெயர்", phoneNumber: "தொலைபேసి எண்", password: "கடவுச்சொல்", area: "பகுதி/கிராமம்", district: "மாவட்டம்", state: "மாநிலம்", jobType: "வேலை வகை", expectedWage: "எதிர்பார்க்கப்படும் தினசரி ஊதியம் (₹)", description: "விளக்கம்", skills: "திறன்கள்", submit: "சமர்ப்பிக்கவும்", cancel: "ரத்து செய்", close: "மூடு", save: "சேமி", role: "நான்",
+    welcomeWorker: "வணக்கம்", workerDashboard: "தொழিলாளர் டாஷ்போர்டு", matchedJobs: "உங்களுக்கான பொருத்தமான வேலைகள்", noMatchesYet: "இன்னும் வேலை பொருத்தங்கள் இல்லை। பொருத்தமான வேலை கிடைக்கும்போது உங்களுக்கு அறிவிப்போம்!", matchScore: "பொருத்தம்", perDay: "/நாள்", contact: "தொடர்பு", notifications: "அறிவிப்புகள்", noNotifications: "இன்னும் அறிவிப்புகள் இல்லை।",
+    welcomeEmployer: "வரவேற்கிறோம்", employerDashboard: "முதலாளி டாஷ்போர்டு", noJobsPosted: "இன்னும் வேலைகள் இடுகையிடப்படவில்லை। உங்கள் முதல் வேலையை இடுகையிடுங்கள்!", workerMatches: "தொழিলাள் பொருத்தங்கள்", viewMatchedWorkers: "பொருத்தமான தொழிலாளர்களைக் காண்க", matchedWorkersFor: "இதற்கான பொருத்தங்கள்:", noWorkersMatched: "இன்னும் தொழிலாளர்கள் பொருத்தப்படவில்லை।",
+    jobTitle: "வேலை தலைப்பு", dailyWageOffered: "வழங்கப்படும் தினசரி ஊதியம் (₹)", contactNumber: "தொடர்பு எண்", requiredSkills: "தேவையான திறன்கள்", village: "கிராமம்", postJobSuccess: "வேலை வெற்றிகரமாக இடுகையிடப்பட்டது!",
+    dontHaveAccount: "கணக்கு இல்லையா?", alreadyHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?", registerHere: "இங்கே பதிவு செய்யுங்கள்", loginHere: "இங்கே உள்நுழையுங்கள்", createAccount: "கணக்கு உருவாக்கு", joinUs: "எங்களுடன் சேருங்கள்", welcomeBack: "மீண்டும் வரவேற்கிறோம்!",
+    loading: "ஏற்றுகிறது...", success: "வெற்றி!", error: "பிழை", noResults: "முடிவுகள் இல்லை",
+    aboutUs: "எங்களைப் பற்றி", helpline: "உதவி எண்", language: "மொழி", madeWithLove: "கிராமப்புற இந்தியாவுக்காக ❤️உடன்", copyright: "© 2025 கிராமீண் ரோஸ்கார். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை।",
+    conversationalRegistration: "உரையாடல் பதிவு", typeYourAnswer: "உங்கள் பதிலை தட்டச்சு செய்யுங்கள்...", allInfoCollected: "அனைத்து தகவல்களும் சேகரிக்கப்பட்டன!", completeRegistration: "பதிவை முடிக்கவும்", completing: "முடிக்கிறது...",
+    clickMicAndSpeak: "மைக்ரோஃபோனைக் கிளிக் செய்து உங்கள் விவரங்களைச் சொல்லுங்கள்:", yourName: "உங்கள் பெயர்", yourVillage: "உங்கள் கிராமம்", yourDistrict: "உங்கள் மாவட்டம்", typeOfWork: "நீங்கள் செய்யும் வேலை", recordingSpeakNow: "பதிவு செய்கிறது... இப்போது பேசுங்கள்!", processingAudio: "ஆடியோ செயலாக்கம்...", demoMode: "டெமோ முறை", audioTranscriptionDemo: "ஆடியோ டிரான்ஸ்கிரிப்ஷன் தற்போது மாக் அம்சம்.", useNormalSignup: "பதிவை முடிக்க சாதாரண படிவத்தைப் பயன்படுத்தவும்.",
+    send: "அனுப்பு", callEmployer: "முதலாளியை அழை", jobsPosted: "வேலைகள் இடுகையிடப்பட்டன", totalMatches: "மொத்த பொருத்தங்கள்",
+  }
+};
+export default ta;

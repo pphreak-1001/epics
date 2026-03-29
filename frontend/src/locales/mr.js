@@ -1,0 +1,21 @@
+const mr = {
+  translation: {
+    appName: "ग्रामीण रोजगार", tagline: "कामकाज तुमच्या जवळ", subtitle: "संपूर्ण भारतातील दैनिक मजुरांना स्थानिक संधींशी जोडणे",
+    home: "होम", findWork: "काम शोधा", postJob: "काम पोस्ट करा", login: "लॉगिन", register: "नोंदणी करा", logout: "ਲॉगआउट", myProfile: "माझे प्रोफाइल", myJobs: "माझी कामे",
+    heroTitle: "जवळ काम, योग्य दाम", heroSubtitle: "मध्यस्थ नाहीत। गोंधळ नाही। फक्त प्रामाणिक काम।", getStarted: "सुरू करा", tollFreeText: "टोल-फ्री हेल्पलाइन:", callForRegistration: "ऑडिओ-आधारित नोंदणीसाठी कॉल करा",
+    features: "हे कसे काम करते", featureWorker: "कामगारांसाठी", featureWorkerDesc: "तुमच्या भाषेत साइन अप करा, जवळपास काम शोधा", featureEmployer: "नियोक्त्यांसाठी", featureEmployerDesc: "नोकर्‍या पोस्ट करा, कुशल कामगार शोधा", featureMatching: "स्मार्ट मॅचिंग", featureMatchingDesc: "स्थान, कौशल्य आणि मजुरी यावर आधारित",
+    signupTitle: "साइन अप करण्याचे तीन सोपे मार्ग", signupChooseMethod: "तुमच्यासाठी सर्वोत्तम काम करणारी पद्धत निवडा", signupNormal: "सामान्य साइन अप", signupNormalDesc: "साधा फॉर्म भरा", signupChatbot: "चॅटबॉट साइन अप", signupChatbotDesc: "ਫਕਤ ਕੁੱਝ ਪ੍ਰਸ਼ਨਾਂ ਦੇ ਉੱਤਰ ਦਿਓ", signupAudio: "ऑडिओ साइन अप", signupAudioDesc: "तुमचे तपशील सांगा",
+    mason: "बांधकाम कामगार", labour: "मजूर", plumber: "प्लंबर", electrician: "इलेक्ट्रिशियन", painter: "पेंटर",
+    name: "नाव", phoneNumber: "फोन नंबर", password: "पासवर्ड", area: "क्षेत्र/गाव", district: "जिल्हा", state: "राज्य", jobType: "कामाचा प्रकार", expectedWage: "अपेक्षित दैनिक मजुरी (₹)", description: "वर्णन", skills: "कौशल्ये", submit: "सबमिट करा", cancel: "रद्द करा", close: "बंद करा", save: "सेव्ह करा", role: "मी आहे",
+    welcomeWorker: "नमस्कार", workerDashboard: "कामगार डॅशबोर्ड", matchedJobs: "तुमच्यासाठी जुळणारी कामे", noMatchesYet: "अद्याप कोणतेही काम जुळलेले नाही। आम्ही योग्य काम सापडल्यास तुम्हाला सूचित करू!", matchScore: "मॅच", perDay: "/दिवस", contact: "संपर्क", notifications: "सूचना", noNotifications: "अद्याप कोणत्याही सूचना नाहीत।",
+    welcomeEmployer: "स्वागत आहे", employerDashboard: "नियोक्ता डॅशबोर्ड", noJobsPosted: "अद्याप कोणतेही काम पोस्ट केलेले नाही। तुमचे पहिले काम पोस्ट करा!", workerMatches: "कामगार जुळणी", viewMatchedWorkers: "जुळणारे कामगार पहा", matchedWorkersFor: "यासाठी जुळणारे:", noWorkersMatched: "अद्याप कोणतेही कामगार जुळलेले नाहीत।",
+    jobTitle: "कामाचे शीर्षक", dailyWageOffered: "दैनिक मजुरी दिली (₹)", contactNumber: "संपर्क क्रमांक", requiredSkills: "आवश्यक कौशल्ये", village: "गाव", postJobSuccess: "काम यशस्वीरित्या पोस्ट केले!",
+    dontHaveAccount: "खाते नाही?", alreadyHaveAccount: "आधीच खाते आहे?", registerHere: "येथे नोंदणी करा", loginHere: "येथे लॉगिन करा", createAccount: "खाते तयार करा", joinUs: "आमच्यात सामील व्हा", welcomeBack: "पुन्हा स्वागत आहे!",
+    loading: "लोड होत आहे...", success: "यश!", error: "त्रुटी", noResults: "कोणतेही परिणाम सापडले नाहीत",
+    aboutUs: "आमच्याबद्दल", helpline: "हेल्पलाइन", language: "भाषा", madeWithLove: "ग्रामीण भारतासाठी ❤️सह बनवले", copyright: "© 2025 ग्रामीण रोजगार। सर्व हक्क राखीव।",
+    conversationalRegistration: "संभाषण नोंदणी", typeYourAnswer: "तुमचे उत्तर टाइप करा...", allInfoCollected: "सर्व माहिती गोळा केली!", completeRegistration: "नोंदणी पूर्ण करा", completing: "पूर्ण होत आहे...",
+    clickMicAndSpeak: "मायक्रोफोनवर क्लिक करा आणि तपशील सांगा:", yourName: "तुमचे नाव", yourVillage: "तुमचे गाव", yourDistrict: "तुमचा जिल्हा", typeOfWork: "तुम्ही करता ते काम", recordingSpeakNow: "रेကોર્ਡਿੰਗ... आता बोला!", processingAudio: "ऑडिओ प्रोसेस होत आहे...", demoMode: "डेमो मोड", audioTranscriptionDemo: "ऑडिओ ट्रान्सक्रिप्शन सध्या मॉक फीचर आहे।", useNormalSignup: "नोंदणी पूर्ण करण्यासाठी सामान्य साइन अप फॉर्म वापरा।",
+    send: "पाठवा", callEmployer: "नियोक्त्याला कॉल करा", jobsPosted: "नोकर्‍या पोस्ट केल्या", totalMatches: "एकूण जुळणी",
+  }
+};
+export default mr;

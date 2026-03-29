@@ -1,0 +1,21 @@
+const te = {
+  translation: {
+    appName: "గ్రామీణ రోజ్‌గార్", tagline: "మీ ఇంటి వద్ద ఉద్యోగం", subtitle: "భారతదేశం అంతటా రోజువారీ కూలీ కార్మికులను స్థానిక అవకాశాలతో కలుపుతోంది",
+    home: "హోమ్", findWork: "పని వెతకండి", postJob: "ఉద్యోగం పోస్ట్ చేయండి", login: "లాగిన్", register: "రిజిస్టర్", logout: "లాగౌట్", myProfile: "నా ప్రొఫైల్", myJobs: "నా ఉద్యోగాలు",
+    heroTitle: "మీ దగ్గర పని, మీకు న్యాయమైన వేతనం", heroSubtitle: "మధ్యవర్తులు లేరు। గందరగోళం లేదు। నిజాయితీగా పని మాత్రమే।", getStarted: "ప్రారంభించండి", tollFreeText: "టోల్-ఫ్రీ హెల్ప్‌లైన్:", callForRegistration: "ఆడియో-ఆధారిత నమోదు కోసం కాల్ చేయండి",
+    features: "ఇది ఎలా పనిచేస్తుంది", featureWorker: "కార్మికుల కోసం", featureWorkerDesc: "మీ భాషలో సైన్ అప్ చేయండి, సమీపంలో పని కనుగొనండి", featureEmployer: "యజమానుల కోసం", featureEmployerDesc: "ఉద్యోగాలు పోస్ట్ చేయండి, నైపుణ్యం కలిగిన కార్మికులను కనుగొనండి", featureMatching: "స్మార్ట్ మ్యాచింగ్", featureMatchingDesc: "స్థానం, నైపుణ్యాలు మరియు వేతనం ఆధారంగా",
+    signupTitle: "సైన్ అప్ చేయడానికి మూడు సులభ మార్గాలు", signupChooseMethod: "మీకు ఉత్తమంగా పనిచేసే పద్ధతిని ఎంచుకోండి", signupNormal: "సాధారణ సైన్ అప్", signupNormalDesc: "సాధారణ ఫారమ్ పూరించండి", signupChatbot: "చాట్‌బాట్ సైన్ అప్", signupChatbotDesc: "కొన్ని ప్రశ్నలకు సమాధానం ఇవ్వండి", signupAudio: "ఆడియో సైన్ అప్", signupAudioDesc: "మీ వివరాలను చెప్పండి",
+    mason: "మేస్త్రీ", labour: "కూలీ", plumber: "ప్లంబర్", electrician: "ఎలక్ట్రీషియన్", painter: "పెయింటర్",
+    name: "పేరు", phoneNumber: "ఫోన్ నంబర్", password: "పాస్‌వర్డ్", area: "ప్రాంతం/గ్రామం", district: "జిల్లా", state: "రాష్ట్రం", jobType: "పని రకం", expectedWage: "అంచనా రోజువారీ వేతనం (₹)", description: "వివరణ", skills: "నైపుణ్యాలు", submit: "సమర్పించండి", cancel: "రద్దు చేయండి", close: "మూసివేయండి", save: "సేవ్ చేయండి", role: "నేను",
+    welcomeWorker: "నమస్కారం", workerDashboard: "కార్మిక డ్యాష్‌బోర్డ్", matchedJobs: "మీకు సరిపోలిన ఉద్యోగాలు", noMatchesYet: "ఇంకా ఉద్యోగ మ్యాచ్‌లు లేవు। మేము తగిన పనిని కనుగొన్నప్పుడు మీకు తెలియజేస్తాము!", matchScore: "మ్యాచ్", perDay: "/రోజుకు", contact: "సంప్రదించండి", notifications: "నోటిఫికేషన్‌లు", noNotifications: "ఇంకా నోటిఫికేషన్‌లు లేవు।",
+    welcomeEmployer: "స్వాగతం", employerDashboard: "యజమాని డ్యాష్‌బోర్డ్", noJobsPosted: "ఇంకా ఉద్యోగాలు పోస్ట్ చేయలేదు। మీ మొదటి ఉద్యోగాన్ని పోస్ట్ చేయండి!", workerMatches: "కార్మిక మ్యాచ్‌లు", viewMatchedWorkers: "సరిపోలిన కార్మికులను చూడండి", matchedWorkersFor: "దీని కోసం సరిపోలినవారు:", noWorkersMatched: "ఇంకా కార్మికులు సరిపోలలేదు।",
+    jobTitle: "ఉద్యోగ శీర్షిక", dailyWageOffered: "అందించే రోజువారీ వేతనం (₹)", contactNumber: "సంప్రదింపు నంబర్", requiredSkills: "అవసరమైన నైపుణ్యాలు", village: "గ్రామం", postJobSuccess: "ఉద్యోగం విజయవంతంగా పోస్ట్ చేయబడింది!",
+    dontHaveAccount: "ఖాతా లేదా?", alreadyHaveAccount: "ఇప్పటికే ఖాతా ఉందా?", registerHere: "ఇక్కడ రిజిస్టర్ చేయండి", loginHere: "ఇక్కడ లాగిన్ అవ్వండి", createAccount: "ఖాతా సృష్టించండి", joinUs: "మాతో చేరండి", welcomeBack: "తిరిగి స్వాగతం!",
+    loading: "లోడ్ అవుతోంది...", success: "విజయం!", error: "లోపం", noResults: "ఫలితాలు కనుగొనబడలేదు",
+    aboutUs: "మా గురించి", helpline: "హెల్ప్‌లైన్", language: "భాష", madeWithLove: "గ్రామీణ భారతదేశం కోసం ❤️తో", copyright: "© 2025 గ్రామీణ రోజ్‌గార్। అన్ని హక్కులు రక్షించబడ్డాయి।",
+    conversationalRegistration: "సంభాషణ నమోదు", typeYourAnswer: "మీ సమాధానాన్ని టైప్ చేయండి...", allInfoCollected: "అన్ని సమాచారం సేకరించబడింది!", completeRegistration: "నమోదును పూర్తి చేయండి", completing: "పూర్తి అవుతోంది...",
+    clickMicAndSpeak: "మైక్రోఫోన్‌పై క్లిక్ చేసి మీ వివరాలను చెప్పండి:", yourName: "మీ పేరు", yourVillage: "మీ గ్రామం", yourDistrict: "మీ జిల్లా", typeOfWork: "మీరు చేసే పని", recordingSpeakNow: "రికార్డింగ్... ఇప్పుడు మాట్లాడండి!", processingAudio: "ఆడియో ప్రాసెస్ చేస్తోంది...", demoMode: "డెమో మోడ్", audioTranscriptionDemo: "ఆడియో ట్రాన్స్‌క్రిప్షన్ ప్రస్తుతం మాక్ ఫీచర్।", useNormalSignup: "సాధారణ సైన్ అప్ ఫారమ్‌ను ఉపయోగించండి।",
+    send: "పంపండి", callEmployer: "యజమానిని కాల్ చేయండి", jobsPosted: "ఉద్యోగాలు పోస్ట్ చేయబడ్డాయి", totalMatches: "మొత్తం మ్యాచ్‌లు",
+  }
+};
+export default te;
