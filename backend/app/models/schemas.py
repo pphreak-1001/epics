@@ -1,14 +1,16 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 
-class UserBase(BaseModel):
-    phone_number: str
-    full_name: str
-    role: str # 'worker' or 'employer'
 
-class UserCreate(UserBase):
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+class UserRegister(BaseModel):
+    name: str
+    phone_number: str
     password: str
+    role: str                       # 'worker' or 'employer'
+    language: str = "hi"
 
 class UserLogin(BaseModel):
     phone_number: str
@@ -18,28 +20,38 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+
+# ── Worker ───────────────────────────────────────────────────────────────────
+
 class WorkerProfile(BaseModel):
+    name: str
+    phone_number: str
     area: str
     district: str
     state: str
     job_type: str
-    expected_wage: float
+    expected_daily_wage: float
     skills: List[str] = []
+    language: str = "hi"
+
+
+# ── Jobs ─────────────────────────────────────────────────────────────────────
 
 class JobCreate(BaseModel):
     title: str
+    job_type: str
     description: str
-    wage: float
-    location: str
-    skills_required: List[str] = []
+    village: str
+    district: str
+    state: str
+    daily_wage_offered: float
+    contact_number: str
+    required_skills: List[str] = []
 
-class Job(JobCreate):
-    id: str
-    employer_id: str
-    posted_at: datetime
 
-class Match(BaseModel):
-    job_id: str
-    worker_id: str
-    score: float
-    matched_at: datetime
+# ── Chatbot ──────────────────────────────────────────────────────────────────
+
+class ChatbotMessage(BaseModel):
+    session_id: str
+    message: str
+    language: str = "hi"
