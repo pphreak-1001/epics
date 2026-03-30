@@ -61,22 +61,32 @@ async def translate_text(text: str, target_language: str) -> str:
         return text
 
 async def transcribe_audio(file_path: str, language: str = "hi") -> str:
-    """Transcribe audio using Sarvam AI Saaras v3"""
-    try:
-        with open(file_path, "rb") as audio_file:
-            response = sarvam_client.speech_to_text.transcribe(
-                file=audio_file,
-                model="saaras:v3",
-                mode="transcribe",
-                language_code=get_sarvam_lang(language)
-            )
-        return response.get("transcript", "")
-    except Exception as e:
-        logger.error(f"Transcription error: {e}")
-        return ""
+    """Transcribe audio using Sarvam AI Saaras v3 with language fallback."""
+    language_attempts = [get_sarvam_lang(language), "hi-IN", "en-IN"]
+    tried = []
+
+    for language_code in language_attempts:
+        if language_code in tried:
+            continue
+        tried.append(language_code)
+        try:
+            with open(file_path, "rb") as audio_file:
+                response = sarvam_client.speech_to_text.transcribe(
+                    file=audio_file,
+                    model="saaras:v3",
+                    mode="transcribe",
+                    language_code=language_code
+                )
+            transcript = response.get("transcript", "")
+            if transcript:
+                return transcript
+        except Exception as e:
+            logger.error(f"Transcription error ({language_code}): {e}")
+
+    return ""
 
 async def extract_details_from_text(text: str) -> dict:
-    """Extract worker details using GPT-3.5 Turbo"""
+    """Extract worker details from multilingual text."""
     try:
         response = openai_client.chat.completions.create(
             model="google/gemini-2.5-pro",
@@ -85,7 +95,7 @@ async def extract_details_from_text(text: str) -> dict:
                     "role": "system", 
                     "content": (
                         "You are an expert data extractor for a rural job platform. "
-                        "Extract the following worker details from the provided text: "
+                        "Extract the following worker details from the provided multilingual text (Indian languages possible): "
                         "name, phone_number, area (village/area), district, state, "
                         "job_type (one of: Mason, Labour, Plumber, Electrician, Painter), "
                         "and expected_daily_wage (as a number). "
@@ -140,3 +150,31 @@ async def generate_speech_from_text(text: str, language_code: str) -> str:
     except Exception as e:
         logger.error(f"Speech generation error: {e}")
         return ""
+
+
+def normalize_extracted_details(data: dict) -> dict:
+    """Normalize extractor output keys and types for registration pipeline."""
+    if not data:
+        return {
+            "name": "", "phone_number": "", "area": "", "district": "", "state": "",
+            "job_type": "", "expected_daily_wage": 0
+        }
+
+    normalized = {
+        "name": data.get("name") or data.get("नाम") or data.get("नाम_") or "",
+        "phone_number": data.get("phone_number") or data.get("phone") or data.get("mobile") or "",
+        "area": data.get("area") or data.get("village") or "",
+        "district": data.get("district") or "",
+        "state": data.get("state") or "",
+        "job_type": data.get("job_type") or data.get("expertise") or data.get("work_type") or "",
+        "expected_daily_wage": data.get("expected_daily_wage") or data.get("wage") or 0,
+    }
+
+    try:
+        wage = str(normalized["expected_daily_wage"]).replace(",", "").strip()
+        normalized["expected_daily_wage"] = float(wage) if wage else 0
+    except Exception:
+        normalized["expected_daily_wage"] = 0
+
+    normalized["phone_number"] = ''.join(ch for ch in str(normalized["phone_number"]) if ch.isdigit())
+    return normalized

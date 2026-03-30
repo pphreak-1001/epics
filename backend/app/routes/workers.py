@@ -9,37 +9,37 @@ import uuid
 router = APIRouter(prefix="/api/workers", tags=["workers"])
 
 @router.post("/kyc-submit")
-async def submit_kyc(kyc: KYCSubmit, user_id: str = Depends(get_current_user)):
+async def submit_kyc(kyc: KYCSubmit, user: dict = Depends(get_current_user)):
     db = await get_database()
     # In this simulation, we accept any image and mark as verified
     await db.users.update_one(
-        {"user_id": user_id},
+        {"user_id": user["user_id"]},
         {"$set": {"kyc_status": "verified"}}
     )
     return {"message": "KYC submitted and verified successfully"}
 
 @router.get("/kyc-status")
-async def get_kyc_status(user_id: str = Depends(get_current_user)):
+async def get_kyc_status(user: dict = Depends(get_current_user)):
     db = await get_database()
-    user = await db.users.find_one({"user_id": user_id})
-    if not user:
+    user_doc = await db.users.find_one({"user_id": user["user_id"]})
+    if not user_doc:
         raise HTTPException(status_code=404, detail="User not found")
-    return {"status": user.get("kyc_status", "pending")}
+    return {"status": user_doc.get("kyc_status", "pending")}
 
 @router.post("/profile")
-async def create_profile(profile: WorkerProfile, user_id: str = Depends(get_current_user)):
+async def create_profile(profile: WorkerProfile, user: dict = Depends(get_current_user)):
     db = await get_database()
-    user = await db.users.find_one({"user_id": user_id})
-    if user["role"] != "worker":
+    user_doc = await db.users.find_one({"user_id": user["user_id"]})
+    if user_doc["role"] != "worker":
         raise HTTPException(status_code=403, detail="Only workers can create profiles")
     
-    existing_profile = await db.workers.find_one({"user_id": user_id})
+    existing_profile = await db.workers.find_one({"user_id": user["user_id"]})
     if existing_profile:
         raise HTTPException(status_code=400, detail="Profile already exists")
     
     profile_doc = {
         "worker_id": str(uuid.uuid4()),
-        "user_id": user_id,
+        "user_id": user["user_id"],
         "name": profile.name,
         "phone_number": profile.phone_number,
         "area": profile.area,
@@ -56,18 +56,18 @@ async def create_profile(profile: WorkerProfile, user_id: str = Depends(get_curr
     return {"message": "Profile created successfully"}
 
 @router.get("/profile")
-async def get_profile(user_id: str = Depends(get_current_user)):
+async def get_profile(user: dict = Depends(get_current_user)):
     db = await get_database()
-    profile = await db.workers.find_one({"user_id": user_id})
+    profile = await db.workers.find_one({"user_id": user["user_id"]})
     if not profile:
         return None
     profile.pop("_id", None)
     return profile
 
 @router.get("/matches")
-async def get_matches(user_id: str = Depends(get_current_user)):
+async def get_matches(user: dict = Depends(get_current_user)):
     db = await get_database()
-    worker = await db.workers.find_one({"user_id": user_id})
+    worker = await db.workers.find_one({"user_id": user["user_id"]})
     if not worker:
         raise HTTPException(status_code=404, detail="Worker profile not found")
     

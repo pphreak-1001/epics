@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from app.routes import auth, workers, employers, chatbot, audio, reviews
+from app.routes import auth, workers, employers, chatbot, audio, reviews, notifications
 from app.services.matching import run_matching_engine
 from app.database import get_database, close_database
 
@@ -29,6 +29,7 @@ app.include_router(employers.router)
 app.include_router(chatbot.router)
 app.include_router(audio.router)
 app.include_router(reviews.router)
+app.include_router(notifications.router)
 
 # Scheduler for matching engine
 scheduler = AsyncIOScheduler()

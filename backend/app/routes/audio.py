@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
-from app.services.ai import transcribe_audio, extract_details_from_text, generate_speech_from_text
+from app.services.ai import transcribe_audio, extract_details_from_text, normalize_extracted_details, generate_speech_from_text
 import os
 import tempfile
 from pydantic import BaseModel
@@ -39,7 +39,7 @@ async def transcribe(file: UploadFile = File(...), language: str = "hi"):
 async def parse_registration(req: ParseRequest):
     try:
         details = await extract_details_from_text(req.text)
-        return {"parsed_data": details}
+        return {"parsed_data": normalize_extracted_details(details), "original_text": req.text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

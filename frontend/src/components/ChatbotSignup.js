@@ -66,13 +66,10 @@ function ChatbotSignup({ onClose, onSuccess }) {
       setMessages(prev => [...prev, { role: 'assistant', content: response.data.response }]);
 
       // Check if registration is complete (only applicable in registration mode)
-      if (mode === 'registration') {
-        const responseText = response.data.response.toLowerCase();
-        if (responseText.includes('complete') || responseText.includes('पूर्ण') || responseText.includes('সফল') || responseText.includes('പൂർത്തിയായി')) {
-          setRegistrationComplete(true);
-          // Automatically trigger auto login
-          setTimeout(completeRegistration, 2000); 
-        }
+      if (mode === 'registration' && response.data.step === 'finish') {
+        setRegistrationComplete(true);
+        // Automatically trigger auto login
+        setTimeout(completeRegistration, 1200);
       }
     } catch (error) {
       setMessages(prev => [...prev, { 

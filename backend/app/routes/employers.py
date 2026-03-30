@@ -8,16 +8,15 @@ import uuid
 router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
 @router.post("")
-async def create_job(job: JobCreate, user_id: str = Depends(get_current_user)):
+async def create_job(job: JobCreate, user: dict = Depends(get_current_user)):
     db = await get_database()
-    user = await db.users.find_one({"user_id": user_id})
     if user["role"] != "employer":
         raise HTTPException(status_code=403, detail="Only employers can post jobs")
     
     job_id = str(uuid.uuid4())
     job_doc = {
         "job_id": job_id,
-        "employer_id": user_id,
+        "employer_id": user["user_id"],
         "title": job.title,
         "job_type": job.job_type,
         "description": job.description,
@@ -35,9 +34,9 @@ async def create_job(job: JobCreate, user_id: str = Depends(get_current_user)):
     return {"message": "Job posted successfully", "job_id": job_id}
 
 @router.get("/my-jobs")
-async def get_my_jobs(user_id: str = Depends(get_current_user)):
+async def get_my_jobs(user: dict = Depends(get_current_user)):
     db = await get_database()
-    jobs = await db.jobs.find({"employer_id": user_id}).sort("created_at", -1).to_list(100)
+    jobs = await db.jobs.find({"employer_id": user["user_id"]}).sort("created_at", -1).to_list(100)
     
     result = []
     for job in jobs:
@@ -49,9 +48,9 @@ async def get_my_jobs(user_id: str = Depends(get_current_user)):
     return result
 
 @router.get("/{job_id}/matches")
-async def get_job_matches(job_id: str, user_id: str = Depends(get_current_user)):
+async def get_job_matches(job_id: str, user: dict = Depends(get_current_user)):
     db = await get_database()
-    job = await db.jobs.find_one({"job_id": job_id, "employer_id": user_id})
+    job = await db.jobs.find_one({"job_id": job_id, "employer_id": user["user_id"]})
     if not job:
         raise HTTPException(status_code=404, detail="Job not found or unauthorized")
     
