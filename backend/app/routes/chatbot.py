@@ -151,6 +151,22 @@ LOCALIZED_QUESTIONS = {
     }
 }
 
+LOCALIZED_HELP_FALLBACK = {
+    "hi": "मैं पंजीकरण, नौकरी ढूँढने, भुगतान और अकाउंट सहायता में मदद कर सकता हूँ।",
+    "en": "I can help with registration, finding jobs, payments, and account support.",
+    "bn": "আমি নিবন্ধন, চাকরি খোঁজা, পেমেন্ট এবং অ্যাকাউন্ট সহায়তায় সাহায্য করতে পারি।",
+    "te": "నేను నమోదు, ఉద్యోగాలు కనుగొనడం, చెల్లింపులు మరియు ఖాతా సహాయంలో సహాయం చేయగలను.",
+    "mr": "मी नोंदणी, नोकरी शोधणे, पेमेंट्स आणि अकाउंट सपोर्टमध्ये मदत करू शकतो.",
+    "ta": "பதிவு, வேலை தேடுதல், கட்டணங்கள் மற்றும் கணக்கு உதவியில் நான் உதவ முடியும்.",
+    "gu": "હું નોંધણી, નોકરી શોધવા, પેમેન્ટ્સ અને એકાઉન્ટ સપોર્ટમાં મદદ કરી શકું છું.",
+    "kn": "ನೋಂದಣಿ, ಕೆಲಸ ಹುಡುಕುವುದು, ಪಾವತಿಗಳು ಮತ್ತು ಖಾತೆ ಸಹಾಯದಲ್ಲಿ ನಾನು ಸಹಾಯ ಮಾಡಬಹುದು.",
+    "ml": "രജിസ്ട്രേഷൻ, ജോലി കണ്ടെത്തൽ, പേയ്മെന്റുകൾ, അക്കൗണ്ട് സഹായം എന്നിവയിൽ ഞാൻ സഹായിക്കാം.",
+    "pa": "ਮੈਂ ਰਜਿਸਟ੍ਰੇਸ਼ਨ, ਨੌਕਰੀ ਲੱਭਣ, ਭੁਗਤਾਨ ਅਤੇ ਅਕਾਊਂਟ ਸਹਾਇਤਾ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ।",
+    "or": "ମୁଁ ପଞ୍ଜିକରଣ, ଚାକିରି ଖୋଜିବା, ପେମେଣ୍ଟ ଏବଂ ଆକାଉଣ୍ଟ ସହାୟତାରେ ସାହାଯ୍ୟ କରିପାରିବି।",
+    "as": "মই পঞ্জীয়ন, চাকৰি বিচৰা, পেমেণ্ট আৰু একাউণ্ট সহায়তাত সহায় কৰিব পাৰোঁ।",
+    "ur": "میں رجسٹریشن، نوکری تلاش کرنے، ادائیگیوں اور اکاؤنٹ سپورٹ میں مدد کر سکتا ہوں۔",
+}
+
 # Update finish templates (remove PIN/Phone)
 for lang in LOCALIZED_QUESTIONS:
     if lang == "hi":
@@ -188,9 +204,7 @@ async def chatbot_conversation(msg: ChatbotMessage):
     if msg.mode == "help":
         response_text = await generate_help_response(msg.message, msg.language)
         if not response_text:
-            response_text = "I can help with registration, finding jobs, payments, and account support."
-            if msg.language != "en":
-                response_text = await translate_text(response_text, msg.language)
+            response_text = LOCALIZED_HELP_FALLBACK.get(msg.language, LOCALIZED_HELP_FALLBACK["hi"])
         return {"response": response_text, "session_id": msg.session_id}
 
     # --- Registration Mode Logic ---
