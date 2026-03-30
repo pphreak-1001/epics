@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from app.models.schemas import UserRegister, UserLogin, Token
-from app.auth import get_password_hash, verify_password, create_access_token
+from app.auth import get_password_hash, verify_password, create_access_token, get_current_user
 from app.database import get_database
 from datetime import datetime
 import uuid
@@ -47,3 +47,7 @@ async def login_user(user: UserLogin):
         "role": user_doc["role"],
         "name": user_doc["name"]
     }
+
+@router.get("/me")
+async def get_me(user: dict = Depends(get_current_user)):
+    return user

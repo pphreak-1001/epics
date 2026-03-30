@@ -1,6 +1,5 @@
-import os
-import uuid
 import tempfile
+import random
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from app.models.schemas import ChatbotMessage
@@ -21,7 +20,7 @@ LOCALIZED_QUESTIONS = {
         "district": "वह किस जिले में है?",
         "state": "वह किस राज्य में है?",
         "wage": "आपकी अपेक्षित दैनिक मजदूरी (रुपये में) क्या है?",
-        "finish": "धन्यवाद! आपका पंजीकरण विवरण एकत्र कर लिया गया है। अब आप अपने डैशबोर्ड पर लॉगिन कर सकते हैं।"
+        "finish": "धन्यवाद! आपका पंजीकरण पूरा हो गया है।\n\nपंजीकरण विवरण:\nफ़ोन: {phone}\nपिन: {pin}\n\nअब आप लॉगिन कर सकते हैं।"
     },
     "en": {
         "greeting": "Hello! I'm here to help you register. What is your name?",
@@ -31,7 +30,7 @@ LOCALIZED_QUESTIONS = {
         "district": "Which district is that in?",
         "state": "Which state?",
         "wage": "What is your expected daily wage in Rupees?",
-        "finish": "Thank you! Your registration details have been collected. You can now login to your dashboard."
+        "finish": "Thank you! Your registration is complete.\n\nLogin Details:\nPhone: {phone}\nPIN: {pin}\n\nYou can now login."
     },
     "bn": {
         "greeting": "নমস্কার! আমি আপনার সাহায্যকারী। চলুন শুরু করি। আপনার নাম কি?",
@@ -41,7 +40,7 @@ LOCALIZED_QUESTIONS = {
         "district": "সেটি কোন জেলায়?",
         "state": "কোন রাজ্যটি?),",
         "wage": "আপনার প্রত্যাশিত দৈনিক মজুরি (টাকায়) কত?",
-        "finish": "ধন্যবাদ! আপনার নিবন্ধনের বিবরণ সংগ্রহ করা হয়েছে। আপনি এখন আপনার ড্যাশবোর্ডে লগইন করতে পারেন।"
+        "finish": "ধন্যবাদ! আপনার নিবন্ধন সম্পূর্ণ হয়েছে।\n\nলগইন বিবরণ:\nফোন: {phone}\nপিন: {pin}\n\nআপনি এখন লগইন করতে পারেন।"
     },
     "mr": {
         "greeting": "नमस्ते! मी तुमचा सोबती आहे. चला सुरुवात करूया. तुमचे नाव काय आहे?",
@@ -51,7 +50,7 @@ LOCALIZED_QUESTIONS = {
         "district": "ते कोणत्या जिल्ह्यात आहे?",
         "state": "कोणते राज्य?",
         "wage": "तुमची अपेक्षित दैनिक मजुरी (रुपयांमध्ये) काय आहे?",
-        "finish": "धन्यवाद! तुमची नोंदणी माहिती गोळा केली गेली आहे. तुम्ही आता तुमच्या डॅशबोर्डवर लॉगिन करू शकता।"
+        "finish": "धन्यवाद! तुमची नोंदणी पूर्ण झाली आहे.\n\nलॉगिन तपशील:\nफोन: {phone}\nपिन: {pin}\n\nतुम्ही आता लॉगिन करू शकता।"
     },
     "te": {
         "greeting": "నమస్కారం! నేను మీ తోడును. ప్రారంభిద్దాం. మీ పేరు ఏమిటి?",
@@ -61,7 +60,7 @@ LOCALIZED_QUESTIONS = {
         "district": "అది ఏ జిల్లాలో ఉంది?",
         "state": "ఏ రాష్ట్రం?",
         "wage": "మీరు ఆశించే రోజువారీ వేతనం (రూపాయల్లో) ఎంత?",
-        "finish": "ధన్యవాదాలు! మీ రిజిస్ట్రేషన్ వివరాలు సేకరించబడ్డాయి. మీరు ఇప్పుడు మీ డ్యాష్‌బోర్డ్‌కు లాగిన్ చేయవచ్చు."
+        "finish": "ధన్యవాదాలు! మీ రిజిస్ట్రేషన్ పూర్తయింది.\n\nలాగిన్ వివరాలు:\nఫోన్: {phone}\nపిన్: {pin}\n\nమీరు ఇప్పుడు లాగిన్ చేయవచ్చు."
     },
     "ta": {
         "greeting": "வணக்கம்! நான் உங்கள் உதவியாளர். ஆரம்பிக்கலாம். உங்கள் பெயர் என்ன?",
@@ -71,7 +70,77 @@ LOCALIZED_QUESTIONS = {
         "district": "அது எந்த மாவட்டத்தில் உள்ளது?",
         "state": "எந்த மாநிலம்?",
         "wage": "உங்களின் எதிர்பார்க்கப்படும் தினசரி ஊதியம் (ரூபாயில்) எவ்வளவு?",
-        "finish": "நன்றி! உங்கள் பதிவு விவரங்கள் சேகரிக்கப்பட்டுள்ளன. நீங்கள் இப்போது உங்கள் டாஷ்போர்டில் லாகின் செய்யலாம்."
+        "finish": "நன்றி! உங்கள் பதிவு முடிந்தது.\n\nஉள்நுழைவு விவரங்கள்:\nதொலைபேசி: {phone}\nபின் (PIN): {pin}\n\nநீங்கள் இப்போது உள்நுழையலாம்."
+    },
+    "gu": {
+        "greeting": "નમસ્તે! હું તમારો સાથી છું. ચાલો શરૂ કરીએ. તમારું નામ શું છે?",
+        "phone": "તમારો મોબાઈલ નંબર શું છે?",
+        "expertise": "તમારી કુશળતાનું ક્ષેત્ર શું છે? (દા.ત. કડિયો, મજૂર, પ્લમ્બર)",
+        "area": "તમે કયા ગામ કે વિસ્તારમાં રહો છો?",
+        "district": "તે કયા જિલ્લામાં છે?",
+        "state": "કયું રાજ્ય?",
+        "wage": "તમારી અપેક્ષિત દૈનિક મજૂરી (રૂપિયામાં) શું છે?",
+        "finish": "આભાર! તમારી નોંધણી સફળતાપૂર્વક પૂર્ણ થઈ ગઈ છે.\n\nલોગિન વિગતો:\nફોન: {phone}\nપિન: {pin}\n\nહવે તમે લોગિન કરી શકો છો."
+    },
+    "kn": {
+        "greeting": "ನಮಸ್ತೆ! ನಾನು ನಿಮ್ಮ ಸಹಾಯಕ. ಪ್ರಾರಂಭಿಸೋಣ. ನಿಮ್ಮ ಹೆಸರೇನು?",
+        "phone": "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಏನು?",
+        "expertise": "ನಿಮ್ಮ ಪರಿಣತಿ ಅಥವಾ ಕೆಲಸದ ಪ್ರಕಾರ ಯಾವುದು? (ಉದಾ: ಮೇಸ್ತ್ರಿ, ಕಾರ್ಮಿಕ, ಪ್ಲಂಬರ್)",
+        "area": "ನೀವು ಯಾವ ಗ್ರಾಮ ಅಥವಾ ಪ್ರದೇಶದಲ್ಲಿ ವಾಸಿಸುತ್ತೀರಿ?",
+        "district": "ಅದು ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿದೆ?",
+        "state": "ಯಾವ ರಾಜ್ಯ?",
+        "wage": "ನಿಮ್ಮ ನಿರೀಕ್ಷಿತ ದೈನಂದಿನ ವೇತನ (ರೂಪಾಯಿಗಳಲ್ಲಿ) ಎಷ್ಟು?",
+        "finish": "ಧನ್ಯವಾದಗಳು! ನಿಮ್ಮ ನೋಂದಣಿ ಪೂರ್ಣಗೊಂಡಿದೆ.\n\nಲಾಗಿನ್ ವಿವರಗಳು:\nಫೋನ್: {phone}\nಪಿನ್: {pin}\n\nನೀವು ಈಗ ಲಾಗಿನ್ ಮಾಡಬಹುದು."
+    },
+    "ml": {
+        "greeting": "നമസ്തേ! ഞാൻ നിങ്ങളുടെ സഹായിയാണ്. നമുക്ക് തുടങ്ങാം. നിങ്ങളുടെ പേരെന്താണ്?",
+        "phone": "നിങ്ങളുടെ മൊബൈൽ നമ്പർ എന്താണ്?",
+        "expertise": "നിങ്ങളുടെ തൊഴിൽ ഏതാണ്? (ഉദാ: മേസൺ, തൊഴിലാളി, പ്ലംബർ)",
+        "area": "നിങ്ങൾ ഏത് ഗ്രാമത്തിലോ പ്രദേശത്തോ ആണ് താമസിക്കുന്നത്?",
+        "district": "അത് ഏത് ജില്ലയിലാണ്?",
+        "state": "ഏത് സംസ്ഥാനം?",
+        "wage": "നിങ്ങൾ പ്രതീക്ഷിക്കുന്ന പ്രതിദിന കൂലി (രൂപയിൽ) എത്രയാണ്?",
+        "finish": "നന്ദി! നിങ്ങളുടെ രജിസ്ട്രേഷൻ പൂർത്തിയായി.\n\nലോഗിൻ വിവരങ്ങൾ:\nഫോൺ: {phone}\nപിൻ: {pin}\n\nനിങ്ങൾക്ക് ഇപ്പോൾ ലോഗിન ചെയ്യാം."
+    },
+    "pa": {
+        "greeting": "नमस्ते! ਮੈਂ ਤੁਹਾਡਾ ਸਾਥੀ ਹਾਂ। ਆਓ ਸ਼ੁਰੂ ਕਰੀਏ। ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?",
+        "phone": "ਤੁਹਾਡਾ ਮੋਬਾਈਲ ਨੰਬਰ ਕੀ ਹੈ?",
+        "expertise": "ਤੁਹਾਡੀ ਮੁਹਾਰਤ ਜਾਂ ਕੰਮ ਦੀ ਕਿਸਮ ਕੀ ਹੈ? (ਜਿਵੇਂ: ਰਾਜ ਮਿਸਤਰੀ, ਮਜ਼ਦੂਰ, ਪਲੰਬਰ)",
+        "area": "ਤੁਸੀਂ ਕਿਹੜੇ ਪਿੰਡ ਜਾਂ ਇਲਾਕੇ ਵਿੱਚ ਰਹਿੰਦੇ ਹੋ?",
+        "district": "ਉਹ ਕਿਹੜਾ ਜ਼ਿਲ੍ਹਾ ਹੈ?",
+        "state": "ਕਿਹੜਾ ਰਾਜ?",
+        "wage": "ਤੁਹਾਡੀ ਅਪੇਖਿਤ ਰੋਜ਼ਾਨਾ ਦਿਹਾੜੀ (ਰੁਪਏ ਵਿੱਚ) ਕੀ ਹੈ?",
+        "finish": "ਧੰਨਵਾਦ! ਤੁਹਾਡੀ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਪੂਰੀ ਹੋ ਗਈ ਹੈ।\n\nਲੌਗਇਨ ਵੇਰਵੇ:\nਫੋਨ: {phone}\nਪਿੰਨ: {pin}\n\nਹੁਣ ਤੁਸੀਂ ਲੌਗਇਨ ਕਰ ਸਕਦੇ ਹੋ।"
+    },
+    "or": {
+        "greeting": "ନମସ୍ତେ! ମୁଁ ଆପଣଙ୍କର ସହାୟକ। ଚାଲନ୍ତୁ ଆରମ୍ଭ କରିବା | ଆପଣଙ୍କ ନାମ କ’ଣ?",
+        "phone": "ଆପଣଙ୍କ ମୋବାଇଲ୍ ନମ୍ବର କ’ଣ?",
+        "expertise": "ଆପଣଙ୍କର ଦକ୍ଷତା ବା କାର୍ଯ୍ୟର ପ୍ରକାର କ’ଣ? (ଯଥା: ରାଜମିସ୍ତ୍ରୀ, ଶ୍ରମିକ, ପ୍ଲମ୍ବର)",
+        "area": "ଆପଣ କେଉଁ ଗ୍ରାମ ବା ଅଞ୍ଚଳରେ ରୁହନ୍ତି?",
+        "district": "ତାହା କେଉଁ ଜିଲ୍ଲାରେ?",
+        "state": "କେଉଁ ରାଜ୍ୟ?",
+        "wage": "ଆପଣଙ୍କର ଆଶା କରାଯାଉଥିବା ଦୈନିକ ମଜୁରୀ (ଟଙ୍କାରେ) କେତେ?",
+        "finish": "ଧନ୍ୟବାଦ! ଆପଣଙ୍କର ପଞ୍ଜିକରଣ ସମାପ୍ତ ହୋଇଛି |\n\nଲଗଇନ୍ ବିବରଣୀ:\nଫୋନ୍: {phone}\nପିନ୍: {pin}\n\nଆପଣ ବର୍ତ୍ତମାନ ଲଗଇନ୍ କରିପାରିବେ |"
+    },
+    "as": {
+        "greeting": "নমস্কাৰ! মই আপোনাৰ সহায়ক। আহক আৰম্ভ কৰোঁ। আপোনাৰ নাম কি?",
+        "phone": "আপোনাৰ মোবাইল নম্বৰ কি?",
+        "expertise": "আপোনাৰ দক্ষতাৰ ক্ষেত্ৰ কি? (যেনে: ৰাজমিস্ত্ৰী, বনুৱা, প্লাম্বাৰ)",
+        "area": "আপুনি কোনখন গাঁও বা অঞ্চলত বাস কৰে?",
+        "district": "সেইটো কোন জিলাত?",
+        "state": "কোনখন ৰাজ্য?",
+        "wage": "আপোনাৰ প্ৰত্যাশিত দৈনিক মজুৰি (টকাত) কিমান?",
+        "finish": "ধন্যবাদ! আপোনাৰ পঞ্জীয়ন সম্পূৰ্ণ হৈছে।\n\nলগইনৰ বিৱৰণ:\nফোন: {phone}\nপিন: {pin}\n\nআপুনি এতিয়া লগইন কৰিব পাৰে।"
+    },
+    "ur": {
+        "greeting": "नमस्ते! میں آپ کا ساتھی ہوں۔ آئیے شروع کرتے ہیں۔ آپ کا نام کیا ہے؟",
+        "phone": "آپ کا موبائل نمبر کیا ہے؟",
+        "expertise": "آپ کی مہارت یا کام کی نوعیت کیا ہے؟ (جیسے: راج مستری، مزدور، پلمبر)",
+        "area": "آپ کس گاؤں یا علاقے میں رہتے ہیں؟",
+        "district": "وہ کس ضلع میں ہے؟",
+        "state": "کون سی ریاست؟",
+        "wage": "آپ کی متوقع روزانہ اجرت (روپوں میں) کیا ہے؟",
+        "finish": "شکریہ! آپ کی رجسٹریشن مکمل ہو گئی ہے۔\n\nلاگ ان کی تفصیلات:\nفون: {phone}\nپن: {pin}\n\nاب آپ لاگ ان کر سکتے ہیں۔"
     }
 }
 
@@ -113,13 +182,54 @@ async def chatbot_conversation(msg: ChatbotMessage):
 
     if next_step == "finish":
         lang_data = LOCALIZED_QUESTIONS.get(language, LOCALIZED_QUESTIONS["en"])
-        response_text = lang_data.get("finish")
+        template = lang_data.get("finish", LOCALIZED_QUESTIONS["en"]["finish"])
         
-        if not response_text:
-            response_text = LOCALIZED_QUESTIONS["en"]["finish"]
+        # --- Create User and Worker Profile ---
+        phone = data.get("phone", "Unknown")
+        name = data.get("name", "Worker")
+        pin = str(random.randint(100000, 999999))
+        
+        # Register in DB
+        existing_user = await db.users.find_one({"phone_number": phone})
+        if not existing_user:
+            import uuid
+            user_id = str(uuid.uuid4())
+            
+            # Create User
+            user_doc = {
+                "user_id": user_id,
+                "name": name,
+                "phone_number": phone,
+                "password": get_password_hash(pin),
+                "role": "worker",
+                "language": language,
+                "created_at": datetime.utcnow()
+            }
+            await db.users.insert_one(user_doc)
+            
+            # Create Worker Profile
+            worker_doc = {
+                "worker_id": str(uuid.uuid4()),
+                "user_id": user_id,
+                "name": name,
+                "phone_number": phone,
+                "area": data.get("area", ""),
+                "district": data.get("district", ""),
+                "state": data.get("state", ""),
+                "job_type": data.get("expertise", ""),
+                "expected_daily_wage": float(data.get("wage", 0).replace(",", "").strip()) if isinstance(data.get("wage"), str) else 0,
+                "skills": [data.get("expertise", "")],
+                "language": language,
+                "created_at": datetime.utcnow()
+            }
+            await db.workers.insert_one(worker_doc)
+            
+            response_text = template.format(phone=phone, pin=pin)
+        else:
+            response_text = "This phone number is already registered. Please log in with your existing credentials."
             if language != "en":
                 response_text = await translate_text(response_text, language)
-        
+
         await db.chatbot_sessions.update_one(
             {"session_id": msg.session_id},
             {"$set": {"data": data, "current_step": "finish"}}
@@ -161,3 +271,27 @@ async def transcribe(file: UploadFile = File(...), language: str = "hi"):
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
+
+@router.post("/complete-registration")
+async def complete_registration(session_id: str):
+    db = await get_database()
+    session = await db.chatbot_sessions.find_one({"session_id": session_id})
+    if not session or session.get("current_step") != "finish":
+        raise HTTPException(status_code=400, detail="Registration not complete or session not found")
+    
+    phone = session.get("data", {}).get("phone")
+    if not phone:
+        raise HTTPException(status_code=400, detail="Phone number not found in session")
+        
+    user = await db.users.find_one({"phone_number": phone})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    token = create_access_token({"user_id": user["user_id"], "role": user.role if hasattr(user, 'role') else user.get('role', 'worker')})
+    
+    return {
+        "token": token,
+        "user_id": user["user_id"],
+        "role": user.get("role", "worker"),
+        "name": user.get("name")
+    }

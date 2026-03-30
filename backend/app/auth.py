@@ -5,6 +5,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from app.database import get_database
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,9 +41,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
+        user_id: str = payload.get("user_id")
         if user_id is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    return user_id
+        
+    db = await get_database()
+    user = await db.users.find_one({"user_id": user_id})
+    if user is None:
+        raise credentials_exception
+        
+    # Remove password for security
+    user.pop("_id", None)
+    user.pop("password", None)
+    return user
