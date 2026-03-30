@@ -59,6 +59,10 @@ COPY --from=frontend-builder /app/frontend/build /app/frontend/build
 COPY nginx.conf /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisord.conf
 
+# Fix Windows CRLF line endings to Linux LF
+RUN sed -i 's/\r//g' /etc/nginx/sites-available/default && \
+    sed -i 's/\r//g' /etc/supervisord.conf
+
 
 # Create log directories
 RUN mkdir -p /var/log/supervisor
