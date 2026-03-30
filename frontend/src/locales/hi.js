@@ -123,6 +123,12 @@ const hi = {
     microphoneAccessError: "माइक्रोफोन तक पहुँच नहीं। कृपया अनुમતियाँ जांचें।",
     clickToStop: "रिकॉर्डिंग रोकने के लिए बटन दबाएं",
     originalLanguage: "स्वतः अनुवादित",
+    locationMatch: "स्थान मिलान",
+    skillMatch: "कौशल मिलान",
+    wageMatch: "मजदूरी मिलान",
+    typeMatch: "काम प्रकार मिलान",
+    workerSkills: "मजदूर कौशल",
+    listenDescription: "काम का विवरण सुनें",
   }
 };
 export default hi;

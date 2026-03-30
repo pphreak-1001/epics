@@ -15,7 +15,7 @@ const ta = {
     aboutUs: "எங்களைப் பற்றி", helpline: "உதவி எண்", language: "மொழி", madeWithLove: "கிராமப்புற இந்தியாவுக்காக ❤️உடன்", copyright: "© 2025 கிராமீண் ரோஸ்கார். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை।",
     conversationalRegistration: "உரையாடல் பதிவு", typeYourAnswer: "உங்கள் பதிலை தட்டச்சு செய்யுங்கள்...", allInfoCollected: "அனைத்து தகவல்களும் சேகரிக்கப்பட்டன!", completeRegistration: "பதிவை முடிக்கவும்", completing: "முடிக்கிறது...",
     clickMicAndSpeak: "மைக்ரோஃபோனைக் கிளிக் செய்து உங்கள் விவரங்களைச் சொல்லுங்கள்:", yourName: "உங்கள் பெயர்", yourVillage: "உங்கள் கிராமம்", yourDistrict: "உங்கள் மாவட்டம்", typeOfWork: "நீங்கள் செய்யும் வேலை", recordingSpeakNow: "பதிவு செய்கிறது... இப்போது பேசுங்கள்!", processingAudio: "ஆடியோ செயலாக்கம்...", demoMode: "டெமோ முறை", audioTranscriptionDemo: "ஆடியோ டிரான்ஸ்கிரிப்ஷன் தற்போது மாக் அம்சம்.", useNormalSignup: "பதிவை முடிக்க சாதாரண படிவத்தைப் பயன்படுத்தவும்.",
-    send: "அனுப்பு", callEmployer: "முதலாளியை அழை", jobsPosted: "வேலைகள் இடுகையிடப்பட்டன", totalMatches: "மொத்த பொருத்தங்கள்",
+    send: "அனுப்பு", callEmployer: "முதலாளியை அழை", jobsPosted: "வேலைகள் இடுகையிடப்பட்டன", totalMatches: "மொத்த பொருத்தங்கள்", locationMatch: "இருப்பிடப் பொருத்தம்", skillMatch: "திறன் பொருத்தம்", wageMatch: "கூલીப் பொருத்தம்", typeMatch: "வேலை வகை பொருத்தம்", workerSkills: "தொழিলাள் திறன்கள்", listenDescription: "வேலை விவரங்களைக் கேளுங்கள்", originalLanguage: "தானாகவே மொழிபெயர்க்கப்பட்டது",
   }
 };
 export default ta;

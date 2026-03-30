@@ -123,6 +123,12 @@ const bn = {
     microphoneAccessError: "মাইক্রোফোনে অ্যাক্সেস করতে অক্ষম। অনুমতি পরীক্ষা করুন।",
     clickToStop: "রেকর্डिंग বন্ধ করতে বোতামে ক্লিক করুন",
     originalLanguage: "স্বয়ংক্রিয়ভাবে অনুবাদিত",
+    locationMatch: "অবস্থান মিল",
+    skillMatch: "দক্ষতা মিল",
+    wageMatch: "মজুরি মিল",
+    typeMatch: "কাজের ধরন মিল",
+    workerSkills: "শ্রমিক দক্ষতা",
+    listenDescription: "কাজের বিবরণ শুনুন",
   }
 };
 export default bn;

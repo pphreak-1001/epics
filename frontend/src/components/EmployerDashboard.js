@@ -462,8 +462,32 @@ function EmployerDashboard({ user, onLogout }) {
                           <span className="font-black">{Math.round(item.match.match_score)}%</span>
                         </div>
                       </div>
+
+                      {/* Match Details Badges */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {item.match_details.skill_match && (
+                          <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-md border border-purple-200">
+                            ✨ {t('skillMatch')}
+                          </span>
+                        )}
+                        {item.match_details.location_match && (
+                          <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-md border border-blue-200">
+                            📍 {t('locationMatch')}
+                          </span>
+                        )}
+                        {item.match_details.wage_match && (
+                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-md border border-green-200">
+                            💰 {t('wageMatch')}
+                          </span>
+                        )}
+                        {item.match_details.type_match && (
+                          <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-md border border-indigo-200">
+                            🛠️ {t('typeMatch')}
+                          </span>
+                        )}
+                      </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-4">
                         <div className="flex items-center space-x-2">
                           <MapPin className="w-4 h-4 text-blue-600" />
                           <span>{item.worker.area}, {item.worker.district}, {item.worker.state}</span>
@@ -471,14 +495,28 @@ function EmployerDashboard({ user, onLogout }) {
                         <div className="flex items-center space-x-2">
                           <DollarSign className="w-4 h-4 text-green-600" />
                           <span className="font-bold">
-                            {t('expectedWage')}: ₹{item.worker.expected_daily_wage}{t('perDay')}
+                            {t('expectedWage')}: ₹{item.worker.expected_daily_wage} {t('perDay')}
                           </span>
                         </div>
                       </div>
 
+                      {/* Worker Skills */}
+                      {item.worker.skills && item.worker.skills.length > 0 && (
+                        <div className="mb-4">
+                          <p className="text-xs font-bold text-gray-500 uppercase mb-2">{t('workerSkills')}:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {item.worker.skills.map((skill, sIdx) => (
+                              <span key={sIdx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       <a 
                         href={`tel:${item.worker.phone_number}`}
-                        className="mt-4 w-full bg-gradient-to-r from-indigo to-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        className="w-full bg-gradient-to-r from-indigo to-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
                       >
                         <Phone className="w-5 h-5" />
                         <span>{item.worker.phone_number}</span>

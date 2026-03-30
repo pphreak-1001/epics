@@ -15,7 +15,7 @@ const mr = {
     aboutUs: "आमच्याबद्दल", helpline: "हेल्पलाइन", language: "भाषा", madeWithLove: "ग्रामीण भारतासाठी ❤️सह बनवले", copyright: "© 2025 ग्रामीण रोजगार। सर्व हक्क राखीव।",
     conversationalRegistration: "संभाषण नोंदणी", typeYourAnswer: "तुमचे उत्तर टाइप करा...", allInfoCollected: "सर्व माहिती गोळा केली!", completeRegistration: "नोंदणी पूर्ण करा", completing: "पूर्ण होत आहे...",
     clickMicAndSpeak: "मायक्रोफोनवर क्लिक करा आणि तपशील सांगा:", yourName: "तुमचे नाव", yourVillage: "तुमचे गाव", yourDistrict: "तुमचा जिल्हा", typeOfWork: "तुम्ही करता ते काम", recordingSpeakNow: "रेကોર્ਡਿੰਗ... आता बोला!", processingAudio: "ऑडिओ प्रोसेस होत आहे...", demoMode: "डेमो मोड", audioTranscriptionDemo: "ऑडिओ ट्रान्सक्रिप्शन सध्या मॉक फीचर आहे।", useNormalSignup: "नोंदणी पूर्ण करण्यासाठी सामान्य साइन अप फॉर्म वापरा।",
-    send: "पाठवा", callEmployer: "नियोक्त्याला कॉल करा", jobsPosted: "नोकर्‍या पोस्ट केल्या", totalMatches: "एकूण जुळणी",
+    send: "पाठवा", callEmployer: "नियोक्त्याला कॉल करा", jobsPosted: "नोकर्‍या पोस्ट केल्या", totalMatches: "एकूण जुळणी", locationMatch: "स्थान मिलान", skillMatch: "कौशल्य मिलान", wageMatch: "मजुरी मिलान", typeMatch: "काम प्रकार मिलान", workerSkills: "कामगार कौशल्ये", listenDescription: "कामाचे वर्णन ऐका", originalLanguage: "स्वयंचलितपणे अनुवादित",
   }
 };
 export default mr;

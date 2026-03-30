@@ -32,26 +32,33 @@ async def run_matching_engine():
             # Calculate match score
             score = 0.0
             
-            # 1. Location score (40% weight) - District match = 100%, State match = 50%
+            # 1. Location score (30% weight) - District match = 100%, State match = 50%
             if job["district"].lower() == worker["district"].lower():
-                score += 40.0
+                score += 30.0
             elif job["state"].lower() == worker["state"].lower():
-                score += 20.0
+                score += 15.0
                 
             # 2. Job type match (30% weight)
             if job["job_type"] == worker["job_type"]:
                 score += 30.0
             
-            # 3. Wage compatibility (30% weight)
+            # 3. Wage compatibility (20% weight)
             wage_diff = abs(job["daily_wage_offered"] - worker["expected_daily_wage"])
             if wage_diff == 0:
-                score += 30.0
-            elif wage_diff <= 50:
-                score += 25.0
-            elif wage_diff <= 100:
                 score += 20.0
-            elif wage_diff <= 200:
+            elif wage_diff <= 50:
+                score += 15.0
+            elif wage_diff <= 100:
                 score += 10.0
+            
+            # 4. Skill matching (20% weight)
+            if job.get("required_skills") and worker.get("skills"):
+                job_skills = {s.lower().strip() for s in job["required_skills"]}
+                worker_skills = {s.lower().strip() for s in worker["skills"]}
+                matches = job_skills.intersection(worker_skills)
+                if matches:
+                    # Give full 20% if any skill matches, or could be proportional
+                    score += 20.0
             
             # Only create match if score is above threshold (40%)
             if score >= 40:

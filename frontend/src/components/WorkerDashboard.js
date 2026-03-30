@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LogOut, Briefcase, Bell, TrendingUp, MapPin, DollarSign, Phone, Award, Star } from 'lucide-react';
+import { LogOut, Briefcase, Bell, TrendingUp, MapPin, DollarSign, Phone, Award, Star, Volume2 } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api';
@@ -10,10 +10,32 @@ function WorkerDashboard({ user, onLogout }) {
   const [matches, setMatches] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleListen = async (text) => {
+    if (playing) return;
+    
+    try {
+      setPlaying(true);
+      const response = await axios.post(`${API_URL}/audio/tts`, {
+        text: text,
+        language: i18n.language
+      });
+      
+      if (response.data.audio_base64) {
+        const audio = new Audio(`data:audio/mp3;base64,${response.data.audio_base64}`);
+        audio.onended = () => setPlaying(false);
+        audio.play();
+      }
+    } catch (error) {
+      console.error('TTS Error:', error);
+      setPlaying(false);
+    }
+  };
 
   const fetchData = async () => {
     const token = localStorage.getItem('token');
@@ -134,61 +156,98 @@ function WorkerDashboard({ user, onLogout }) {
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className="mb-4">
-                      <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-heritage-green transition-colors">
-                        {item.job.title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed line-clamp-2">
-                        {item.job.description}
-                      </p>
-                      <div className="mt-2">
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 12.236 11.618 14z" clipRule="evenodd" />
-                          </svg>
-                          {t('originalLanguage') || 'Original Language'}
-                        </span>
+                    {/* Match Details Badges */}
+                    <div className="px-6 pb-2">
+                      <div className="flex flex-wrap gap-2">
+                        {item.match_details?.skill_match && (
+                          <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-md border border-purple-200">
+                            ✨ {t('skillMatch')}
+                          </span>
+                        )}
+                        {item.match_details?.location_match && (
+                          <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-md border border-blue-200">
+                            📍 {t('locationMatch')}
+                          </span>
+                        )}
+                        {item.match_details?.wage_match && (
+                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-md border border-green-200">
+                            💰 {t('wageMatch')}
+                          </span>
+                        )}
+                        {item.match_details?.type_match && (
+                          <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-md border border-indigo-200">
+                            🛠️ {t('typeMatch')}
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    {/* Info Pills */}
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2 text-gray-700">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-blue-600" />
+                    {/* Content */}
+                    <div className="p-6 pt-2">
+                      <div className="mb-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-2xl font-black text-gray-900 group-hover:text-heritage-green transition-colors">
+                            {item.job.title}
+                          </h3>
+                          <button 
+                            onClick={() => handleListen(item.job.description)}
+                            disabled={playing}
+                            className={`${playing ? 'bg-gray-100' : 'bg-orange-100 hover:bg-orange-200'} p-2 rounded-full transition-colors flex items-center space-x-1`}
+                            title={t('listenDescription')}
+                          >
+                            <Volume2 className={`w-4 h-4 ${playing ? 'text-gray-400' : 'text-orange-600'}`} />
+                            <span className={`text-xs font-bold ${playing ? 'text-gray-400' : 'text-orange-600'}`}>{t('listenDescription')}</span>
+                          </button>
                         </div>
-                        <span className="font-medium">{item.job.village}, {item.job.district}, {item.job.state}</span>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <DollarSign className="w-4 h-4 text-green-600" />
+                        <p className="text-gray-600 leading-relaxed line-clamp-2">
+                          {item.job.description}
+                        </p>
+                        <div className="mt-2 text-right">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 12.236 11.618 14z" clipRule="evenodd" />
+                            </svg>
+                            {t('originalLanguage') || 'Original Language'}
+                          </span>
                         </div>
-                        <span className="text-2xl font-black text-green-600">
-                          ₹{item.job.daily_wage_offered}
-                          <span className="text-sm font-normal text-gray-600">{t('perDay')}</span>
-                        </span>
                       </div>
-                      
-                      <div className="flex items-center space-x-2 text-gray-700">
-                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                          <Phone className="w-4 h-4 text-purple-600" />
-                        </div>
-                        <span className="font-bold">{t('contact')}: {item.job.contact_number}</span>
-                      </div>
-                    </div>
 
-                    {/* Action Button */}
-                    <a 
-                      href={`tel:${item.job.contact_number}`}
-                      className="mt-6 w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
-                    >
-                      <Phone className="w-5 h-5" />
-                      <span>{t('callEmployer')}</span>
-                    </a>
-                  </div>
+                      {/* Info Pills */}
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 text-gray-700">
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <MapPin className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <span className="font-medium">{item.job.village}, {item.job.district}, {item.job.state}</span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                            <DollarSign className="w-4 h-4 text-green-600" />
+                          </div>
+                          <span className="text-2xl font-black text-green-600">
+                            ₹{item.job.daily_wage_offered}
+                            <span className="text-sm font-normal text-gray-600">{t('perDay')}</span>
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2 text-gray-700">
+                          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <Phone className="w-4 h-4 text-purple-600" />
+                          </div>
+                          <span className="font-bold">{t('contact')}: {item.job.contact_number}</span>
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <a 
+                        href={`tel:${item.job.contact_number}`}
+                        className="mt-6 w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                      >
+                        <Phone className="w-5 h-5" />
+                        <span>{t('callEmployer')}</span>
+                      </a>
+                    </div>
 
                   {/* Decorative Corner */}
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-saffron/10 to-transparent rounded-br-full"></div>

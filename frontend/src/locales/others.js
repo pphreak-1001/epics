@@ -1,10 +1,32 @@
 const others = {
-  gu: { translation: { appName: "ગ્રામીણ રોજગાર", tagline: "તમારા ઘરે કામ", subtitle: "સમગ્ર ભારતમાં દૈનિક મજૂરોને સ્થાનિક તકો સાથે જોડવું", heroTitle: "નજીકમાં કામ, યોગ્ય કિંમત", heroSubtitle: "કોઈ દલાલો નહીં. કોઈ ગூંચવણ નહીં. માત્ર પ્રામાણિક કામ.", getStarted: "શરૂ કરો", mason: "મિસ્ત્રી", labour: "મજૂર", plumber: "પ્લમ્બર", electrician: "ઇલેક્ટ્રિશિયન", painter: "પેઇન્ટર" } },
-  kn: { translation: { appName: "ಗ್ರಾಮೀಣ ರೋಜ್‌ಗಾರ್", tagline: "ನಿಮ್ಮ ಮನೆ ಬಾಗಿಲಲ್ಲಿ ಕೆಲಸ", subtitle: "ಭారತದಾದ್ಯಂತ ದೈನಂದิน కూಲಿ ಕಾರ್ಮಿಕರನ್ನು ಸ್ಥಳೀಯ అవకాశాలతోలి సత్కర్యించుವುದು", heroTitle: "ಹತ್ತಿರ ಕೆಲಸ, ನ್ಯಾಯಯುತ ವೇತನ", heroSubtitle: "ಯಾವುದೇ ಮಧ್ಯವರ್ತಿಗಳಿಲ್ಲ. ಗೊಂದಲವಿಲ್ಲ. ಕೇವల ಪ್ರಾಮಾಣಿಕ ಕೆಲಸ.", getStarted: "ಪ್ರಾರಂಭಿಸಿ", mason: "ಮೇಸ್ತ್ರಿ", labour: "ಕೂಲಿ", plumber: "ಪ್ಲಂಬರ್", electrician: "ಎಲೆಕ್ಟ್ರೀಷಿಯನ್", painter: "ಪೇಂಟರ್" } },
-  ml: { translation: { appName: "ഗ്രാമീണ് റോസ്‌ഗാർ", tagline: "നിങ്ങളുടെ വാതിൽപ്പടിയിൽ തൊഴിൽ", subtitle: "ഇന്ത്യയിലുടനീളം ദിവസവേതന തൊഴിലാളികളെ പ്രാദേശിക അവസരങ്ങളുമായി ബന്ധിപ്പിക്കുന്നു", heroTitle: "അടുത്ത് ജോലി, ന്യായമായ വേതനം", heroSubtitle: "ഇടനിലക്കാരില്ല. ആശയക്കുഴപ്പമില്ല. സത്യസന്ധമായ ജോലി മാത്രം.", getStarted: "ആരംഭിക്കുക", mason: "മേസ്ത്രി", labour: "തൊഴിലാളി", plumber: "പ്ലംബർ", electrician: "ഇലക്ട്രീഷ്യൻ", painter: "പെയിന്റർ" } },
-  pa: { translation: { appName: "ਗ੍ਰਾਮੀਣ ਰੋਜ਼ਗਾਰ", tagline: "ਤੁਹਾਡੇ ਦਰਵਾਜ਼ੇ 'ਤੇ ਕੰਮ", subtitle: "ਪੂਰੇ ਭਾਰਤ ਵਿੱਚ ਰੋਜ਼ਾਨਾ ਮਜ਼ਦੂਰੀ ਕਰਨ ਵਾਲੇ ਮਜ਼ਦੂਰਾਂ ਨੂੰ ਸਥਾਨਕ ਮੌਕਿਆਂ ਨਾਲ ਜੋੜਨਾ", heroTitle: "ਨੇੜੇ ਕੰਮ, ਸਹੀ ਮਜ਼ਦੂਰੀ", heroSubtitle: "ਕੋਈ ਵਿਚੋਲੇ ਨਹੀਂ। ਕੋਈ ਉਲਝਣ ਨਹੀਂ। ਸਿਰਫ਼ ਇਮਾਨਦਾਰ ਕੰਮ।", getStarted: "ਸ਼ੁਰੂ ਕਰੋ", mason: "ਰਾਜ ਮਿਸਤਰੀ", labour: "ਮਜ਼ਦੂਰ", plumber: "ਪਲੰਬਰ", electrician: "ਇਲੈਕਟ੍ਰੀਸ਼ੀਅਨ", painter: "ਪੇਂਟਰ" } },
-  or: { translation: { appName: "ଗ୍ରାମୀଣ ରୋଜଗାର", tagline: "ଆପଣଙ୍କ ଦ୍ୱାରରେ ନିଯୁକ୍ତି", subtitle: "ସମଗ୍ର ଭାରତରେ ଦୈନିକ ମଜୁରୀ କର୍ମଚାରୀମାନଙ୍କୁ ସ୍ଥାନୀୟ ସୁଯୋଗ ସହିତ ସଂଯୋଗ କରିବା", heroTitle: "ନିକଟରେ କାମ, ଉଚିତ ମଜୁରୀ", getStarted: "ଆରମ୍ଭ କରନ୍ତୁ" } },
-  as: { translation: { appName: "গ্ৰামীণ ৰোজগাৰ", tagline: "আপোনাৰ দুৱাৰমুখত নিয়োগ", subtitle: "সমগ্ৰ ভাৰতত দৈনিক মজুৰি শ্ৰমিকসকলক স্থানীয় সুযোগৰ সৈতে সংযোগ কৰা", heroTitle: "ওচৰত কাম, ন্যায্য মজুৰি", getStarted: "আৰম্ভ কৰক" } },
-  ur: { translation: { appName: "گرامین روزگار", tagline: "آپ کے دروازے پر روزگار", subtitle: "پورے بھارت میں یومیہ مزدوری کرنے والوں کو مقامی مواقع سے جوڑنا", heroTitle: "قریب کام، مناسب مزدوری", heroSubtitle: "کوئی بیچوالا نہیں۔ کوئی الجھن نہیں۔ صرف ایمانداری سے کام۔", getStarted: "شروع کریں", mason: "مستری", labour: "مزدور", plumber: "پلمبر", electrician: "بجلی کا کاریگر", painter: "پینٹر" } }
+  gu: { translation: { 
+    appName: "ગ્રામીણ રોજગાર", tagline: "તમારા ઘરે કામ", subtitle: "સમગ્ર ભારતમાં દૈનિક મજૂરોને સ્થાનિક તકો સાથે જોડવું", heroTitle: "નજીકમાં કામ, યોગ્ય કિંમત", heroSubtitle: "કોઈ દલાલો નહીં. કોઈ ગૂંચવણ નહીં. માત્ર પ્રામાણિક કામ.", getStarted: "શરૂ કરો", mason: "મિસ્ત્રી", labour: "મજૂર", plumber: "પ્લમ્બર", electrician: "ઇલેક્ટ્રિશિયન", painter: "પેઇન્ટર",
+    locationMatch: "સ્થાન મેચ", skillMatch: "કૌશલ્ય મેચ", wageMatch: "મજૂરી મેચ", typeMatch: "કામ પ્રકાર મેચ", workerSkills: "મજૂર કૌશલ્ય", listenDescription: "કામનું વર્ણન સાંભળો", originalLanguage: "સ્વચાલિત અનુવાદ"
+  } },
+  kn: { translation: { 
+    appName: "ಗ್ರಾಮೀಣ ರೋಜ್‌ಗಾರ್", tagline: "ನಿಮ್ಮ ಮನೆ ಬಾಗಿಲಲ್ಲಿ ಕೆಲಸ", subtitle: "ಭಾರತದಾದ್ಯಂತ ದೈನಂದಿನ కూలి ಕಾರ್ಮಿಕರನ್ನು ಸ್ಥಳೀಯ అవకాశాలతోలి ಸತ್ಕರ್ಯించుವುದು", heroTitle: "ಹತ್ತಿರ ಕೆಲಸ, ನ್ಯಾಯಯುತ ವೇತನ", heroSubtitle: "ಯಾವುದೇ ಮಧ್ಯವರ್ತಿಗಳಿಲ್ಲ. ಗೊಂದಲವಿಲ್ಲ. ಕೇವಲ ಪ್ರಾಮಾಣಿಕ ಕೆಲಸ.", getStarted: "ಪ್ರಾರಂಭಿಸಿ", mason: "ಮೇಸ್ತ್ರಿ", labour: "ಕೂಲಿ", plumber: "ಪ್ಲಂಬರ್", electrician: "ಎಲೆಕ್ಟ್ರೀಷಿಯನ್", painter: "ಪೇಂಟರ್",
+    locationMatch: "ಸ್ಥಳದ ಹೊಂದಾಣಿಕೆ", skillMatch: "ಕೌಶಲ್ಯದ ಹೊಂದಾಣಿಕೆ", wageMatch: "ಕೂಲಿ ಹೊಂದಾಣಿಕೆ", typeMatch: "ಕೆಲಸದ ಪ್ರಕಾರ ಹೊಂದಾಣಿಕೆ", workerSkills: "ಕಾರ್ಮಿಕರ ಕೌಶಲ್ಯಗಳು", listenDescription: "ಕೆಲಸದ ವಿವರಣೆಯನ್ನು ಕೇಳಿ", originalLanguage: "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅನುವಾದಿಸಲಾಗಿದೆ"
+  } },
+  ml: { translation: { 
+    appName: "ഗ്രാമീണ് റോസ്‌ഗാർ", tagline: "നിങ്ങളുടെ വാതിൽപ്പടിയിൽ തൊഴിൽ", subtitle: "ഇന്ത്യയിലുടനീളം ദിവസവേതന തൊഴിലാളികളെ പ്രാദേശിക അവസരങ്ങളുമായി ബന്ധിപ്പിക്കുന്നു", heroTitle: "അടുത്ത് ജോലി, ന്യായമായ വേതനം", heroSubtitle: "ഇടനിലക്കാരില്ല. ആശയക്കുഴപ്പമില്ല. സത്യസന്ധമായ ജോലി മാത്രം.", getStarted: "ആരംഭിക്കുക", mason: "മേസ്ത്രി", labour: "തൊഴിലാളി", plumber: "പ്ലംബർ", electrician: "ഇലക്ട്രീഷ്യൻ", painter: "പെയിന്റർ",
+    locationMatch: "സ്ഥലപ്പൊരുത്തം", skillMatch: "നൈപുണ്യപ്പൊരുത്തം", wageMatch: "കൂലിപ്പൊരുത്തം", typeMatch: "ജോലി തരം പൊരുത്തം", workerSkills: "തൊഴിലാളി നൈപുണ്യങ്ങൾ", listenDescription: "ജോലി വിവരണം ശ്രവിക്കുക", originalLanguage: "ഓട്ടോമാറ്റിക്കായി വിവർത്തനം ചെയ്തത്"
+  } },
+  pa: { translation: { 
+    appName: "ਗ੍ਰਾਮੀਣ ਰੋਜ਼ਗਾਰ", tagline: "ਤੁਹਾਡੇ ਦਰਵਾਜ਼ੇ 'ਤੇ ਕੰਮ", subtitle: "ਪੂਰੇ ਭਾਰਤ ਵਿੱਚ ਰੋਜ਼ਾਨਾ ਮਜ਼ਦੂਰੀ ਕਰਨ ਵਾਲੇ ਮਜ਼ਦੂਰਾਂ ਨੂੰ ਸਥਾਨਕ ਮੌਕਿਆਂ ਨਾਲ ਜੋੜਨਾ", heroTitle: "ਨੇੜੇ ਕੰਮ, ਸਹੀ ਮਜ਼ਦੂਰੀ", heroSubtitle: "ਕੋਈ ਵਿਚੋਲੇ ਨਹੀਂ। ਕੋਈ ਉਲਝਣ ਨਹੀਂ। ਸਿਰਫ਼ ਇਮਾਨਦਾਰ ਕੰਮ।", getStarted: "ਸ਼ੁਰੂ ਕਰੋ", mason: "ਰਾਜ ਮਿਸਤਰੀ", labour: "ਮਜ਼ਦૂਰ", plumber: "ਪਲੰਬਰ", electrician: "ਇਲੈਕਟ੍ਰੀਸ਼ੀਅਨ", painter: "ਪੇਂਟਰ",
+    locationMatch: "ਸਥਾਨ ਦਾ ਮੇਲ", skillMatch: "ਹੁਨਰ ਦਾ ਮੇਲ", wageMatch: "ਮਜ਼ਦૂਰੀ ਦਾ ਮੇਲ", typeMatch: "ਕੰਮ ਦੀ ਕਿਸਮ ਦਾ ਮੇਲ", workerSkills: "ਮਜ਼ਦੂਰੀ ਕੌਸ਼ਲ", listenDescription: "ਕੰਮ ਦਾ ਵੇਰਵਾ ਸੁਣੋ", originalLanguage: "ਆਟੋ-ਅਨੁਵਾਦ"
+  } },
+  or: { translation: { 
+    appName: "ଗ୍ରାମୀଣ ରୋଜଗାର", tagline: "ଆପଣଙ୍କ ଦ୍ୱାରରେ ନିଯୁକ୍ତି", subtitle: "ସମଗ୍ର ଭାରତରେ ଦୈନିକ ମଜୁରୀ କର୍ମଚାରୀମାନଙ୍କୁ ସଂଯୋଗ କରିବା", heroTitle: "ନିକଟରେ କାମ, ଉଚିତ ମଜୁରী", getStarted: "ଆରମ୍ଭ କରନ୍ତୁ",
+    locationMatch: "ସ୍ଥାନ ମେଳ", skillMatch: "ଦକ୍ଷତା ମେଳ", wageMatch: "ମଜୁରୀ ମେଳ", typeMatch: "କାର୍ଯ્ય ପ୍ରକાર ମେଳ", workerSkills: "ଶ୍ରମିକ ଦକ୍ଷତା", listenDescription: "କାର୍ଯ୍ୟ ବିବਰଣୀ ଶୁଣନ୍ତୁ", originalLanguage: "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଅନୁଦିତ"
+  } },
+  as: { translation: { 
+    appName: "গ্ৰামীণ ৰোজগাৰ", tagline: "আপোনাৰ দুৱাৰমুখত নিয়োগ", subtitle: "সমগ্ৰ ভাৰતত দৈনিক মজুৰি শ্ৰમિકসকলক স্থানীয় সংযোগ কৰা", heroTitle: "ওচৰত কাম, ন্যায্য মজুৰি", getStarted: "আৰম্ভ কৰক",
+    locationMatch: "স্থানৰ মিল", skillMatch: "দক্ষতাৰ মিল", wageMatch: "মজুৰিৰ মিল", typeMatch: "কামৰ প্ৰকাৰ মিল", workerSkills: "শ্ৰમિકৰ দক্ষতা", listenDescription: "কামৰ বিৱৰণ শুনક", originalLanguage: "স্বয়ংক্ৰিয়ভাৱে অনুবাদ কৰা হৈছে"
+  } },
+  ur: { translation: { 
+    appName: "گرامین روزگار", tagline: "آپ کے دروازے پر روزگار", subtitle: "پورے بھارت میں یومیہ مزدوری کرنے والوں کو مقامی مواقع سے جوڑنا", heroTitle: "قریب کام، مناسب مزدوری", heroSubtitle: "کوئی بیچوالا نہیں۔ کوئی الجھن نہیں۔ صرف ایمانداری سے کام۔", getStarted: "شروع کریں", mason: "مستری", labour: "مزدور", plumber: "پلمبر", electrician: "بجلی کا کاریگر", painter: "پینٹر",
+    locationMatch: "مقام کی مطابقت", skillMatch: "ہنر کی مطابقت", wageMatch: "اجرت کی مطابقت", typeMatch: "کام کی قسم کی مطابقت", workerSkills: "مزدور کی مہارتیں", listenDescription: "کام کی تفصیل سنیں", originalLanguage: "خودکار ترجمہ"
+  } }
 };
+
 export default others;

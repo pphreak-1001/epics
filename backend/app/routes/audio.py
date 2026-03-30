@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
-from app.services.ai import transcribe_audio, extract_details_from_text
+from app.services.ai import transcribe_audio, extract_details_from_text, generate_speech_from_text
 import os
 import tempfile
 from pydantic import BaseModel
@@ -7,6 +7,10 @@ from pydantic import BaseModel
 router = APIRouter(prefix="/api/audio", tags=["audio"])
 
 class ParseRequest(BaseModel):
+    text: str
+    language: str = "hi"
+
+class TTSRequest(BaseModel):
     text: str
     language: str = "hi"
 
@@ -36,5 +40,15 @@ async def parse_registration(req: ParseRequest):
     try:
         details = await extract_details_from_text(req.text)
         return {"parsed_data": details}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/tts")
+async def text_to_speech(req: TTSRequest):
+    try:
+        audio_base64 = await generate_speech_from_text(req.text, req.language)
+        if not audio_base64:
+            raise HTTPException(status_code=500, detail="Speech generation failed")
+        return {"audio_base64": audio_base64}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

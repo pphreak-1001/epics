@@ -124,6 +124,12 @@ const en = {
     microphoneAccessError: "Unable to access microphone. Please check permissions.",
     clickToStop: "Click the button to stop recording",
     originalLanguage: "Auto-translated",
+    locationMatch: "Location Match",
+    skillMatch: "Skill Match",
+    wageMatch: "Wage Match",
+    typeMatch: "Job Type Match",
+    workerSkills: "Worker Skills",
+    listenDescription: "Listen to Job Description",
   }
 };
 export default en;

@@ -61,8 +61,26 @@ async def get_job_matches(job_id: str, user_id: str = Depends(get_current_user))
     for match in matches:
         worker = await db.workers.find_one({"worker_id": match["worker_id"]})
         if worker:
+            # Calculate breakdown for UI
+            details = {
+                "location_match": job["district"].lower() == worker["district"].lower() or job["state"].lower() == worker["state"].lower(),
+                "type_match": job["job_type"] == worker["job_type"],
+                "wage_match": abs(job["daily_wage_offered"] - worker["expected_daily_wage"]) <= 100,
+                "skill_match": False
+            }
+            
+            if job.get("required_skills") and worker.get("skills"):
+                job_skills = {s.lower().strip() for s in job["required_skills"]}
+                worker_skills = {s.lower().strip() for s in worker["skills"]}
+                if job_skills.intersection(worker_skills):
+                    details["skill_match"] = True
+
             worker.pop("_id", None)
             match.pop("_id", None)
-            result.append({"match": match, "worker": worker})
+            result.append({
+                "match": match, 
+                "worker": worker,
+                "match_details": details
+            })
             
     return result

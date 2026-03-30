@@ -31,20 +31,51 @@ function AudioSignup({ onClose, onSuccess }) {
     };
   }, []);
 
+  // Check permission on mount
+  useEffect(() => {
+    if (!window.isSecureContext && window.location.hostname !== 'localhost') {
+      setError(t('secureContextRequired') || 'Microphone access requires a secure connection (HTTPS). Please use a secure URL.');
+    }
+
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'microphone' }).then(result => {
+        if (result.state === 'denied') {
+          setError(t('micPermissionDenied') || 'Microphone access is denied. Please enable it in your browser settings.');
+        }
+        result.onchange = () => {
+          if (result.state === 'granted') setError('');
+        };
+      });
+    }
+  }, [t]);
+
   const startRecording = async () => {
     setError('');
     setTranscription('');
     setParsedData(null);
     audioChunksRef.current = [];
 
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError(t('micNotSupported') || 'Your browser does not support microphone access or is in a non-secure context.');
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          sampleRate: 44100
-        } 
-      });
+      let stream;
+      try {
+        // Try with specific high-quality constraints first
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 44100
+          } 
+        });
+      } catch (e) {
+        console.warn('Specific constraints failed, falling back to basic audio', e);
+        // Fallback to basic audio if specific constraints fail
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
       
       // Determine best supported MIME type
       const mimeType = MediaRecorder.isTypeSupported('audio/webm') 
@@ -82,7 +113,17 @@ function AudioSignup({ onClose, onSuccess }) {
       
     } catch (err) {
       console.error('Error accessing microphone:', err);
-      setError(t('microphoneAccessError') || 'Unable to access microphone. Please check permissions.');
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setError(t('micPermissionDenied') || 'Microphone access was denied. Please allow it in your browser settings.');
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        setError(t('micNotFound') || 'No microphone was found on your device.');
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        setError(t('micInUse') || 'Your microphone is already in use by another application.');
+      } else if (err.name === 'SecurityError') {
+        setError(t('secureContextRequired') || 'Microphone access is blocked due to an insecure connection (HTTPS required).');
+      } else {
+        setError(t('microphoneAccessError') || 'Unable to access microphone. Please check permissions and try again.');
+      }
     }
   };
 
@@ -211,7 +252,14 @@ function AudioSignup({ onClose, onSuccess }) {
     bn: ['আপনার নাম', 'আপনার গ্রাম/এলাকা', 'আপনার জেলা এবং রাজ্য', 'আপনি যে ধরনের কাজ করেন', 'প্রত্যাশিত দৈনিক মজুরি', 'আপনার ফোন নম্বর'],
     te: ['మీ పేరు', 'మీ గ్రామం/ప్రాంతం', 'మీ జిల్లా మరియు రాష్ట్రం', 'మీరు చేసే పని', 'అంచనా రోజువారీ వేతనం', 'మీ ఫోన్ నంబర్'],
     mr: ['तुमचे नाव', 'तुमचे गाव/क्षेत्र', 'तुमचा जिल्हा आणि राज्य', 'तुम्ही जे काम करता', 'अपेक्षित दैनिक मजुरी', 'तुमचा फोन नंबर'],
-    ta: ['உங்கள் பெயர்', 'உங்கள் கிராமம்/பகுதி', 'உங்கள் மாவட்டம் மற்றும் மாநிலம்', 'நீங்கள் செய்யும் வேலை', 'எதிர்பார்க்கப்படும் தினசரி ஊதியம்', 'உங்கள் தொலைபேசி எண்']
+    ta: ['உங்கள் பெயர்', 'உங்கள் கிராமம்/பகுதி', 'உங்கள் மாவட்டம் மற்றும் மாநிலம்', 'நீங்கள் செய்யும் வேலை', 'எதிர்பார்க்கப்படும் தினசரி ஊதியம்', 'உங்கள் தொலைபேசி எண்'],
+    gu: ['તમારું નામ', 'તમારું ગામ/વિસ્તાર', 'તમારો જિલ્લો અને રાજ્ય', 'તમે જે પ્રકારનું કામ કરો છો', 'અપેક્ષિત દૈનિક મજૂરી', 'તમારો ફોન નંબર'],
+    kn: ['ನಿಮ್ಮ ಹೆಸರು', 'ನಿಮ್ಮ ಗ್ರಾಮ/ಪ್ರದೇಶ', 'ನಿಮ್ಮ ಜಿಲ್ಲೆ ಮತ್ತು ರಾಜ್ಯ', 'ನೀವು ಮಾಡುವ ಕೆಲಸದ ವರ್ಗ', 'ನಿರೀಕ್ಷಿತ ದೈನಂದಿನ ಕೂಲಿ', 'ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ'],
+    ml: ['നിങ്ങളുടെ പേര്', 'നിങ്ങളുടെ ഗ്രാമം/പ്രദേശം', 'നിങ്ങളുടെ ജില്ലയും സംസ്ഥാനവും', 'നിങ്ങൾ ചെയ്യുന്ന ജോലിയുടെ തരം', 'പ്രതീക്ഷിക്കുന്ന ദിവസവേതനം', 'നിങ്ങളുടെ ഫോൺ നമ്പർ'],
+    pa: ['ਤੁਹਾਡਾ ਨਾਮ', 'ਤੁਹਾਡਾ ਪਿੰਡ/إلاਕਾ', 'ਤੁਹਾਡਾ ਜ਼ਿਲ੍ਹਾ ਅਤੇ ਰਾਜ', 'ਤੁਸੀਂ ਜੋ ਕੰਮ ਕਰਦੇ ਹੋ', 'ਲੋੜੀਂਦੀ ਦਿਹਾੜੀ', 'ਤੁਹਾਡਾ ਫੋਨ ਨੰਬਰ'],
+    or: ['ଆପଣଙ୍କ ନାମ', 'ଆପଣଙ୍କ ଗ୍ରାମ/ଅଞ୍ଚଳ', 'ଆପଣଙ୍କ ଜିଲ୍ଲା ଏବଂ ରାଜ୍ୟ', 'ଆପଣ କରୁଥିବା କାର୍ଯ୍ୟର ପ୍ରକାର', 'ଆଶା କରାଯାଉଥିବା ଦୈନିକ ମଜୁରୀ', 'ଆପଣଙ୍କ ଫୋନ୍ ନମ୍ବର'],
+    as: ['আপোনাৰ নাম', 'আপোনাৰ গাওঁ/অঞ্চল', 'আপোনাৰ জিলা আৰু ৰাজ্য', 'আপুনি কৰা কামৰ ধৰণ', 'প্ৰত্যাশিত দৈনিক মজুৰি', 'আপোনাৰ ফোন নম্বৰ'],
+    ur: ['آپ کا نام', 'آپ کا گاؤں/علاقہ', 'آپ کا ضلع اور ریاست', 'آپ کے کام کی قسم', 'متوقع یومیہ اجرت', 'آپ کا فون نمبر']
   };
 
   const currentInstructions = instructions[i18n.language] || instructions.hi;
