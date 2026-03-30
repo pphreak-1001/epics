@@ -8,7 +8,7 @@ import uuid
 router = APIRouter(prefix="/api/reviews", tags=["reviews"])
 
 @router.post("/job-complete/{job_id}")
-async def mark_job_complete(job_id: str, user_id: str = Depends(get_current_user)):
+async def mark_job_complete(job_id: str, user: dict = Depends(get_current_user)):
     db = await get_database()
     job = await db.jobs.find_one({"job_id": job_id})
     if not job:
@@ -23,14 +23,14 @@ async def mark_job_complete(job_id: str, user_id: str = Depends(get_current_user
     return {"message": "Job marked as completed. Please provide a review."}
 
 @router.post("/rate")
-async def rate_user(review: ReviewCreate, user_id: str = Depends(get_current_user)):
+async def rate_user(review: ReviewCreate, user: dict = Depends(get_current_user)):
     db = await get_database()
     
     # Store the review
     review_doc = {
         "review_id": str(uuid.uuid4()),
         "job_id": review.job_id,
-        "from_user_id": user_id,
+        "from_user_id": user["user_id"],
         "to_user_id": review.target_user_id,
         "rating": review.rating,
         "comment": review.comment,

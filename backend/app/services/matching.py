@@ -74,7 +74,14 @@ async def run_matching_engine():
                 await db.matches.insert_one(match_doc)
                 match_count += 1
                 
-                # Notifications can be added here
-                # await notify_worker(worker, job, score)
+                notification_doc = {
+                    "notification_id": str(uuid.uuid4()),
+                    "user_id": worker["user_id"],
+                    "job_id": job["job_id"],
+                    "message": f"New match found: {job['title']} in {job['district']} (₹{job['daily_wage_offered']}/day)",
+                    "sent_at": datetime.utcnow(),
+                    "type": "job_match"
+                }
+                await db.notifications.insert_one(notification_doc)
                 
     logger.info(f"Matching complete. Created {match_count} new matches.")

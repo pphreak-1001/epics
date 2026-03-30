@@ -1,11 +1,12 @@
 import tempfile
+import os
 import random
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from app.models.schemas import ChatbotMessage
 from app.database import get_database
 from app.auth import get_password_hash, create_access_token
-from app.services.ai import transcribe_audio, extract_details_from_text, translate_text
+from app.services.ai import transcribe_audio, extract_details_from_text, normalize_extracted_details, translate_text
 
 router = APIRouter(prefix="/api/chatbot", tags=["chatbot"])
 
@@ -146,6 +147,26 @@ LOCALIZED_QUESTIONS = {
 
 # ── Help Mode Content ────────────────────────────────────────────────────────
 
+
+HELP_RESPONSES = {
+    "job": {
+        "en": "You can find jobs from your dashboard. We match your skills and location with nearby work.",
+        "hi": "आप अपने डैशबोर्ड से काम देख सकते हैं। हम आपके कौशल और स्थान के अनुसार पास के काम दिखाते हैं।",
+    },
+    "pay": {
+        "en": "Payment is made directly by the employer after job completion. Confirm wages before starting work.",
+        "hi": "काम पूरा होने के बाद भुगतान सीधे नियोक्ता करता है। काम शुरू करने से पहले मजदूरी की पुष्टि करें।",
+    },
+    "use": {
+        "en": "Register, complete KYC, and then you will see matched jobs near you.",
+        "hi": "रजिस्टर करें, KYC पूरा करें, फिर आपको पास के मैच हुए काम दिखेंगे।",
+    },
+    "default": {
+        "en": "I can help with registration, finding jobs, payments, and account support.",
+        "hi": "मैं पंजीकरण, काम ढूंढने, भुगतान और खाते से जुड़ी मदद कर सकता हूँ।",
+    }
+}
+
 HELP_PROMPT = """
 You are a helpful assistant for the GraminRozgar platform. 
 GraminRozgar connects rural workers with local employers.
@@ -192,25 +213,20 @@ async def chatbot_conversation(msg: ChatbotMessage):
     
     # --- Help Mode Logic ---
     if msg.mode == "help":
-        # Use LLM or simple Q&A. Here we'll use a simulated LLM response for brevity, 
-        # but in a real app, you'd call a service like extract_details_from_text 
-        # or a dedicated LLM endpoint.
-        prompt = HELP_PROMPT.format(language=msg.language, question=msg.message)
-        # For simulation, we'll return a helpful response based on keywords
-        response_text = ""
         m = msg.message.lower()
-        if "job" in m or "काम" in m:
-            response_text = "You can find jobs by going to your dashboard. We match your skills with local requirements."
-        elif "pay" in m or "पैसा" in m or "मजदूरी" in m:
-            response_text = "Payments are made directly by the employer to you after the job is completed."
-        elif "use" in m or "कैसे" in m:
-            response_text = "It's simple! Just register, complete your KYC, and you'll see jobs near you."
+        if any(k in m for k in ["job", "काम", "काम", "நேரம்", "চাকরি", "పని"]):
+            key = "job"
+        elif any(k in m for k in ["pay", "पैसा", "मजदूरी", "payment", "பணம்", "টাকা", "వేతనం"]):
+            key = "pay"
+        elif any(k in m for k in ["use", "कैसे", "how", "help", "कसे", "ఎలా", "কীভাবে"]):
+            key = "use"
         else:
-            response_text = "I am here to help. You can ask about registration, finding jobs, or how payments work."
-        
-        if msg.language != "en":
+            key = "default"
+
+        response_text = HELP_RESPONSES[key].get(msg.language) or HELP_RESPONSES[key]["en"]
+        if msg.language not in ["en", "hi"]:
             response_text = await translate_text(response_text, msg.language)
-            
+
         return {"response": response_text, "session_id": msg.session_id}
 
     # --- Registration Mode Logic ---
@@ -337,7 +353,7 @@ async def transcribe(file: UploadFile = File(...), language: str = "hi"):
     try:
         text = await transcribe_audio(tmp_path, language)
         details = await extract_details_from_text(text)
-        return {"text": text, "extracted": details}
+        return {"text": text, "extracted": normalize_extracted_details(details)}
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
