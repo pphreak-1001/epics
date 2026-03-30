@@ -15,8 +15,8 @@ services:
     container_name: graminrozgar-app
     restart: unless-stopped
     ports:
-      # Expose on port 80 to map to domain name
-      - "80:80"
+      # Expose on port 8080 to map to domain name
+      - "8080:8080"
     environment:
       # Hardcode your MongoDB Atlas connection string here
       - MONGO_URL=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/graminrozgar?retryWrites=true&w=majority

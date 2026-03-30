@@ -58,7 +58,7 @@ COPY --from=frontend-builder /app/frontend/build /app/frontend/build
 # Create nginx configuration
 RUN cat > /etc/nginx/sites-available/default << 'EOF'
 server {
-    listen 80;
+    listen 8080;
     server_name _;
 
     # Frontend - React App
@@ -119,11 +119,11 @@ EOF
 RUN mkdir -p /var/log/supervisor
 
 # Expose port
-EXPOSE 80
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost/health || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # Start supervisor (runs nginx and backend)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
