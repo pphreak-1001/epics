@@ -6,7 +6,13 @@ from fastapi import APIRouter, HTTPException, UploadFile, File
 from app.models.schemas import ChatbotMessage
 from app.database import get_database
 from app.auth import get_password_hash, create_access_token
-from app.services.ai import transcribe_audio, extract_details_from_text, normalize_extracted_details, translate_text
+from app.services.ai import (
+    transcribe_audio,
+    extract_details_from_text,
+    normalize_extracted_details,
+    translate_text,
+    generate_help_response,
+)
 
 router = APIRouter(prefix="/api/chatbot", tags=["chatbot"])
 
@@ -145,39 +151,6 @@ LOCALIZED_QUESTIONS = {
     }
 }
 
-# ── Help Mode Content ────────────────────────────────────────────────────────
-
-
-HELP_RESPONSES = {
-    "job": {
-        "en": "You can find jobs from your dashboard. We match your skills and location with nearby work.",
-        "hi": "आप अपने डैशबोर्ड से काम देख सकते हैं। हम आपके कौशल और स्थान के अनुसार पास के काम दिखाते हैं।",
-    },
-    "pay": {
-        "en": "Payment is made directly by the employer after job completion. Confirm wages before starting work.",
-        "hi": "काम पूरा होने के बाद भुगतान सीधे नियोक्ता करता है। काम शुरू करने से पहले मजदूरी की पुष्टि करें।",
-    },
-    "use": {
-        "en": "Register, complete KYC, and then you will see matched jobs near you.",
-        "hi": "रजिस्टर करें, KYC पूरा करें, फिर आपको पास के मैच हुए काम दिखेंगे।",
-    },
-    "default": {
-        "en": "I can help with registration, finding jobs, payments, and account support.",
-        "hi": "मैं पंजीकरण, काम ढूंढने, भुगतान और खाते से जुड़ी मदद कर सकता हूँ।",
-    }
-}
-
-HELP_PROMPT = """
-You are a helpful assistant for the GraminRozgar platform. 
-GraminRozgar connects rural workers with local employers.
-Users can find jobs, register as workers, or post jobs as employers.
-Workers are paid directly by employers.
-The platform is available in 13 Indian languages.
-
-Answer the following user question in a simple, clear, and helpful way in {language}:
-"{question}"
-"""
-
 # Update finish templates (remove PIN/Phone)
 for lang in LOCALIZED_QUESTIONS:
     if lang == "hi":
@@ -213,20 +186,11 @@ async def chatbot_conversation(msg: ChatbotMessage):
     
     # --- Help Mode Logic ---
     if msg.mode == "help":
-        m = msg.message.lower()
-        if any(k in m for k in ["job", "काम", "काम", "நேரம்", "চাকরি", "పని"]):
-            key = "job"
-        elif any(k in m for k in ["pay", "पैसा", "मजदूरी", "payment", "பணம்", "টাকা", "వేతనం"]):
-            key = "pay"
-        elif any(k in m for k in ["use", "कैसे", "how", "help", "कसे", "ఎలా", "কীভাবে"]):
-            key = "use"
-        else:
-            key = "default"
-
-        response_text = HELP_RESPONSES[key].get(msg.language) or HELP_RESPONSES[key]["en"]
-        if msg.language not in ["en", "hi"]:
-            response_text = await translate_text(response_text, msg.language)
-
+        response_text = await generate_help_response(msg.message, msg.language)
+        if not response_text:
+            response_text = "I can help with registration, finding jobs, payments, and account support."
+            if msg.language != "en":
+                response_text = await translate_text(response_text, msg.language)
         return {"response": response_text, "session_id": msg.session_id}
 
     # --- Registration Mode Logic ---

@@ -112,6 +112,34 @@ async def extract_details_from_text(text: str) -> dict:
         logger.error(f"Detail extraction error: {e}")
         return {}
 
+
+async def generate_help_response(question: str, language: str = "en") -> Optional[str]:
+    """Generate dynamic help/support response via OpenRouter."""
+    try:
+        response = openai_client.chat.completions.create(
+            model="google/gemini-2.5-pro",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are GraminRozgar's support assistant. "
+                        "Provide concise, practical help for workers/employers about registration, KYC, jobs, payments, and account issues. "
+                        "Respond in the user's requested language."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Language: {language}\nUser question: {question}"
+                }
+            ],
+            temperature=0.5,
+        )
+        content = response.choices[0].message.content
+        return content.strip() if content else None
+    except Exception as e:
+        logger.error(f"Help response generation error: {e}")
+        return None
+
 async def generate_speech_from_text(text: str, language_code: str) -> str:
     """Generate base64-encoded audio from text using Sarvam AI TTS"""
     try:

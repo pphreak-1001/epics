@@ -13,6 +13,34 @@ function KYCProcess({ onComplete }) {
   const [loading, setLoading] = useState(false);
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
+  const selfieUploadRef = useRef(null);
+  const aadhaarUploadRef = useRef(null);
+
+  const toBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const handleImageUpload = async (event, type) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const imageData = await toBase64(file);
+      if (type === 'selfie') {
+        setSelfie(imageData);
+      } else {
+        setAadhaar(imageData);
+      }
+    } catch (err) {
+      console.error('Image upload failed', err);
+      alert(t('imageUploadFailed') || "Couldn't process this image. Please try another one.");
+    } finally {
+      event.target.value = '';
+    }
+  };
 
   const startCamera = async () => {
     try {
@@ -74,7 +102,7 @@ function KYCProcess({ onComplete }) {
       }, 3000);
     } catch (err) {
       setLoading(false);
-      alert("Verification failed. Please try again.");
+      alert(t('verificationFailed') || "Verification failed. Please try again.");
       setStep(1);
     }
   };
@@ -118,10 +146,26 @@ function KYCProcess({ onComplete }) {
             </div>
             
             {!selfie && !stream && (
-              <button onClick={startCamera} className="w-full py-4 bg-indigo text-white rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all">
-                <Camera className="w-5 h-5" />
-                <span>{t('openCamera') || "Open Camera"}</span>
-              </button>
+              <div className="space-y-3">
+                <button onClick={startCamera} className="w-full py-4 bg-indigo text-white rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all">
+                  <Camera className="w-5 h-5" />
+                  <span>{t('openCamera') || "Open Camera"}</span>
+                </button>
+                <button
+                  onClick={() => selfieUploadRef.current?.click()}
+                  className="w-full py-4 bg-white text-indigo border border-indigo rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-50 transition-all"
+                >
+                  <Upload className="w-5 h-5" />
+                  <span>{t('uploadSelfie') || "Upload Selfie"}</span>
+                </button>
+                <input
+                  ref={selfieUploadRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(e, 'selfie')}
+                />
+              </div>
             )}
             
             {stream && (
@@ -161,10 +205,26 @@ function KYCProcess({ onComplete }) {
             </div>
             
             {!aadhaar && !stream && (
-              <button onClick={startCamera} className="w-full py-4 bg-indigo text-white rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all">
-                <Camera className="w-5 h-5" />
-                <span>{t('openCamera') || "Open Camera"}</span>
-              </button>
+              <div className="space-y-3">
+                <button onClick={startCamera} className="w-full py-4 bg-indigo text-white rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all">
+                  <Camera className="w-5 h-5" />
+                  <span>{t('openCamera') || "Open Camera"}</span>
+                </button>
+                <button
+                  onClick={() => aadhaarUploadRef.current?.click()}
+                  className="w-full py-4 bg-white text-indigo border border-indigo rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-indigo-50 transition-all"
+                >
+                  <Upload className="w-5 h-5" />
+                  <span>{t('uploadAadhaar') || "Upload Aadhaar Photo"}</span>
+                </button>
+                <input
+                  ref={aadhaarUploadRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(e, 'aadhaar')}
+                />
+              </div>
             )}
             
             {stream && (
