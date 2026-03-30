@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LogOut, Briefcase, Bell, TrendingUp, MapPin, DollarSign, Phone, Award, Star, Volume2 } from 'lucide-react';
 import axios from 'axios';
+import ReviewModal from './ReviewModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api';
 
@@ -11,6 +12,7 @@ function WorkerDashboard({ user, onLogout }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
+  const [reviewTarget, setReviewTarget] = useState(null); // {job, targetUser}
 
   useEffect(() => {
     fetchData();
@@ -103,6 +105,25 @@ function WorkerDashboard({ user, onLogout }) {
                 </div>
                 <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
                   <span className="font-bold">{notifications.length}</span> {t('notifications')}
+                </div>
+              </div>
+              
+              {/* Credentials Section */}
+              <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center md:justify-start">
+                <div className="bg-white/10 backdrop-blur-sm px-6 py-4 rounded-xl border border-white/20 shadow-inner max-w-sm">
+                  <p className="text-white/80 text-sm font-bold uppercase tracking-wider mb-2">{t('myCredentials') || "My Credentials"}</p>
+                  <div className="space-y-1">
+                    <p className="text-white flex items-center justify-between">
+                      <span className="opacity-80 text-sm">Phone:</span>
+                      <span className="font-mono font-bold">{user.phone_number}</span>
+                    </p>
+                    {user.temp_pin && (
+                      <p className="text-white flex items-center justify-between">
+                        <span className="opacity-80 text-sm">PIN/Password:</span>
+                        <span className="font-mono font-bold bg-white/20 px-2 rounded tracking-widest">{user.temp_pin}</span>
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -239,14 +260,23 @@ function WorkerDashboard({ user, onLogout }) {
                         </div>
                       </div>
 
-                      {/* Action Button */}
-                      <a 
-                        href={`tel:${item.job.contact_number}`}
-                        className="mt-6 w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
-                      >
-                        <Phone className="w-5 h-5" />
-                        <span>{t('callEmployer')}</span>
-                      </a>
+                      {/* Action Buttons */}
+                      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a 
+                          href={`tel:${item.job.contact_number}`}
+                          className="w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-4 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        >
+                          <Phone className="w-5 h-5" />
+                          <span>{t('callEmployer')}</span>
+                        </a>
+                        <button
+                          onClick={() => setReviewTarget({ job: item.job, user: { user_id: item.job.employer_id, name: 'Employer' } })}
+                          className="w-full bg-white text-orange-600 border-2 border-orange-500 font-bold py-3 px-4 rounded-xl hover:bg-orange-50 hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2 group-hover:block"
+                        >
+                          <Star className="w-5 h-5 fill-current" />
+                          <span>{t('completeAndRate') || "Complete & Rate"}</span>
+                        </button>
+                      </div>
                     </div>
 
                   {/* Decorative Corner */}
@@ -299,6 +329,20 @@ function WorkerDashboard({ user, onLogout }) {
           )}
         </section>
       </div>
+      {/* Review Modal */}
+      {reviewTarget && (
+        <ReviewModal
+          job={reviewTarget.job}
+          targetUser={reviewTarget.user}
+          targetRole="employer"
+          isWorker={true}
+          onClose={() => setReviewTarget(null)}
+          onSuccess={() => {
+            setReviewTarget(null);
+            fetchData();
+          }}
+        />
+      )}
     </div>
   );
 }

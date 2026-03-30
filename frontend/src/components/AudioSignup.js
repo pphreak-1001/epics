@@ -216,9 +216,6 @@ function AudioSignup({ onClose, onSuccess }) {
         });
       }
 
-      const tempPassword = parsedData.phone_number.slice(-6);
-      alert(`${t('registrationSuccess') || 'Registration successful!'}\n${t('tempPasswordIs') || 'Your temporary password is:'} ${tempPassword}\n${t('pleaseRemember') || 'Please remember it.'}`);
-      
       onSuccess();
     } catch (err) {
       console.error('Registration error:', err);

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.models.schemas import WorkerProfile
+from app.models.schemas import WorkerProfile, KYCSubmit
 from app.auth import get_current_user
 from app.database import get_database
 from app.services.ai import translate_text
@@ -7,6 +7,24 @@ from datetime import datetime
 import uuid
 
 router = APIRouter(prefix="/api/workers", tags=["workers"])
+
+@router.post("/kyc-submit")
+async def submit_kyc(kyc: KYCSubmit, user_id: str = Depends(get_current_user)):
+    db = await get_database()
+    # In this simulation, we accept any image and mark as verified
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"kyc_status": "verified"}}
+    )
+    return {"message": "KYC submitted and verified successfully"}
+
+@router.get("/kyc-status")
+async def get_kyc_status(user_id: str = Depends(get_current_user)):
+    db = await get_database()
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"status": user.get("kyc_status", "pending")}
 
 @router.post("/profile")
 async def create_profile(profile: WorkerProfile, user_id: str = Depends(get_current_user)):

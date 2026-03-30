@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LogOut, Plus, Users, Briefcase, X, MapPin, DollarSign, Phone, Star } from 'lucide-react';
 import axios from 'axios';
+import ReviewModal from './ReviewModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api';
 
@@ -12,6 +13,7 @@ function EmployerDashboard({ user, onLogout }) {
   const [showJobForm, setShowJobForm] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobMatches, setJobMatches] = useState([]);
+  const [reviewTarget, setReviewTarget] = useState(null); // {job, targetUser}
   const [formData, setFormData] = useState({
     title: '',
     job_type: 'Labour',
@@ -514,13 +516,22 @@ function EmployerDashboard({ user, onLogout }) {
                         </div>
                       )}
 
-                      <a 
-                        href={`tel:${item.worker.phone_number}`}
-                        className="w-full bg-gradient-to-r from-indigo to-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
-                      >
-                        <Phone className="w-5 h-5" />
-                        <span>{item.worker.phone_number}</span>
-                      </a>
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a 
+                          href={`tel:${item.worker.phone_number}`}
+                          className="w-full bg-gradient-to-r from-indigo to-purple-600 text-white font-bold py-3 px-4 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        >
+                          <Phone className="w-5 h-5" />
+                          <span>{item.worker.phone_number}</span>
+                        </a>
+                        <button
+                          onClick={() => setReviewTarget({ job: selectedJob, user: { user_id: item.worker.user_id, name: item.worker.name } })}
+                          className="w-full bg-white text-indigo border-2 border-indigo font-bold py-3 px-4 rounded-xl hover:bg-indigo-50 hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        >
+                          <Star className="w-5 h-5 fill-current" />
+                          <span>{t('rateUser') || "Rate Worker"}</span>
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -528,6 +539,19 @@ function EmployerDashboard({ user, onLogout }) {
             </div>
           </div>
         </div>
+      )}
+      {/* Review Modal */}
+      {reviewTarget && (
+        <ReviewModal
+          job={reviewTarget.job}
+          targetUser={reviewTarget.user}
+          targetRole="worker"
+          isWorker={false}
+          onClose={() => setReviewTarget(null)}
+          onSuccess={() => {
+            setReviewTarget(null);
+          }}
+        />
       )}
     </div>
   );

@@ -33,9 +33,14 @@ class WorkerProfile(BaseModel):
     expected_daily_wage: float
     skills: List[str] = []
     language: str = "hi"
+    kyc_status: Optional[str] = "pending"  # 'pending' or 'verified'
+
+class KYCSubmit(BaseModel):
+    selfie_image: str  # Base64
+    id_card_image: str # Base64
 
 
-# ── Jobs ─────────────────────────────────────────────────────────────────────
+# ── Jobs & Reviews ───────────────────────────────────────────────────────────
 
 class JobCreate(BaseModel):
     title: str
@@ -48,6 +53,15 @@ class JobCreate(BaseModel):
     contact_number: str
     required_skills: List[str] = []
 
+class JobUpdate(BaseModel):
+    status: str # 'active', 'in_progress', 'completed'
+
+class ReviewCreate(BaseModel):
+    job_id: str
+    rating: int # 1 to 5
+    comment: str
+    target_user_id: str # The person being reviewed
+
 
 # ── Chatbot ──────────────────────────────────────────────────────────────────
 
@@ -55,3 +69,4 @@ class ChatbotMessage(BaseModel):
     session_id: str
     message: str
     language: str = "hi"
+    mode: str = "registration" # 'registration' or 'help'

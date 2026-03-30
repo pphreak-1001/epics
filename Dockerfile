@@ -46,8 +46,8 @@ WORKDIR /app
 # Copy backend requirements and install Python dependencies
 COPY backend/requirements.txt ./backend/
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r backend/requirements.txt && \
-    pip install --no-cache-dir emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+    pip install --no-cache-dir -r backend/requirements.txt
+
 
 # Copy backend source code
 COPY backend/ ./backend/

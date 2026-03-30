@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import LandingPage from './components/LandingPage';
 import WorkerDashboard from './components/WorkerDashboard';
 import EmployerDashboard from './components/EmployerDashboard';
+import KYCGuard from './components/KYCGuard';
 import LanguageSelector from './components/LanguageSelector';
 import axios from 'axios';
 
@@ -61,7 +62,9 @@ function App() {
         <LandingPage onLogin={checkAuth} />
       ) : (
         user?.role === 'worker' ? (
-          <WorkerDashboard user={user} onLogout={handleLogout} />
+          <KYCGuard>
+            <WorkerDashboard user={user} onLogout={handleLogout} />
+          </KYCGuard>
         ) : (
           <EmployerDashboard user={user} onLogout={handleLogout} />
         )

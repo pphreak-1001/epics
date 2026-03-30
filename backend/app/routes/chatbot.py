@@ -144,9 +144,76 @@ LOCALIZED_QUESTIONS = {
     }
 }
 
+# ── Help Mode Content ────────────────────────────────────────────────────────
+
+HELP_PROMPT = """
+You are a helpful assistant for the GraminRozgar platform. 
+GraminRozgar connects rural workers with local employers.
+Users can find jobs, register as workers, or post jobs as employers.
+Workers are paid directly by employers.
+The platform is available in 13 Indian languages.
+
+Answer the following user question in a simple, clear, and helpful way in {language}:
+"{question}"
+"""
+
+# Update finish templates (remove PIN/Phone)
+for lang in LOCALIZED_QUESTIONS:
+    if lang == "hi":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "धन्यवाद! आपका पंजीकरण पूरा हो गया है। हम आपको आपके डैशबोर्ड पर ले जा रहे हैं..."
+    elif lang == "en":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "Thank you! Your registration is complete. We are logging you in now..."
+    elif lang == "bn":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ধন্যবাদ! আপনার নিবন্ধন সম্পূর্ণ হয়েছে। আমরা আপনাকে আপনার ড্যাশবোর্ডে নিয়ে যাচ্ছি..."
+    elif lang == "mr":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "धन्यवाद! तुमची नोंदणी पूर्ण झाली आहे. आम्ही तुम्हाला तुमच्या डॅशबोर्डवर नेत आहोत..."
+    elif lang == "te":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ధన్యవాదాలు! మీ రిజిస్ట్రేషన్ పూర్తయింది. మేము మిమ్మల్ని మీ డాష్‌బోర్డ్‌కు తీసుకెళ్తున్నాము..."
+    elif lang == "ta":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "நன்றி! உங்கள் பதிவு முடிந்தது. உங்களை உங்கள் டாஷ்போர்டிற்கு அழைத்துச் செல்கிறோம்..."
+    elif lang == "gu":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "આભાર! તમારી નોંધણી સફળતાપૂર્વક પૂર્ણ થઈ ગઈ છે. અમે તમને તમારા ડેશબોર્ડ પર લઈ જઈ રહ્યા છીએ..."
+    elif lang == "kn":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ಧನ್ಯವಾದಗಳು! ನಿಮ್ಮ ನೋಂದಣಿ ಪೂರ್ಣಗೊಂಡಿದೆ. ನಾವು ನಿಮ್ಮನ್ನು ನಿಮ್ಮ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಕರೆದೊಯ್ಯುತ್ತಿದ್ದೇವೆ..."
+    elif lang == "ml":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "നന്ദി! നിങ്ങളുടെ രജിസ്ട്രേഷൻ പൂർത്തിയായി. ഞങ്ങൾ നിങ്ങളെ നിങ്ങളുടെ ഡാഷ്ബോർഡിലേക്ക് കൊണ്ടുപോകുന്നു..."
+    elif lang == "pa":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ਧੰਨਵਾਦ! ਤੁਹਾਡੀ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਪੂਰੀ ਹੋ ਗਈ ਹੈ। ਅਸੀਂ ਤੁਹਾਨੂੰ ਤੁਹਾਡੇ ਡੈਸ਼ਬੋਰਡ 'ਤੇ ਲੈ ਕੇ ਜਾ ਰਹੇ ਹਾਂ..."
+    elif lang == "or":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ଧନ୍ୟବାଦ! ଆପଣଙ୍କର ପଞ୍ଜିକରଣ ସମାପ୍ତ ହୋଇଛି | ଆମେ ଆପଣଙ୍କୁ ଆପଣଙ୍କର ଡ୍ୟାସବୋର୍ଡକୁ ନେଇଯାଉଛୁ..."
+    elif lang == "as":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "ধন্যবাদ! আপোনাৰ পঞ্জীয়ন সম্পূৰ্ণ হৈছে। আমি আপোনাক আপোনাৰ ডেশ্ববৰ্ডলৈ লৈ গৈ আছোঁ..."
+    elif lang == "ur":
+        LOCALIZED_QUESTIONS[lang]["finish"] = "شکریہ! آپ کی رجسٹریشن مکمل ہو گئی ہے۔ ہم آپ کو آپ کے ڈیش بورڈ پر لے جا رہے ہیں..."
+
 @router.post("/conversation")
 async def chatbot_conversation(msg: ChatbotMessage):
     db = await get_database()
+    
+    # --- Help Mode Logic ---
+    if msg.mode == "help":
+        # Use LLM or simple Q&A. Here we'll use a simulated LLM response for brevity, 
+        # but in a real app, you'd call a service like extract_details_from_text 
+        # or a dedicated LLM endpoint.
+        prompt = HELP_PROMPT.format(language=msg.language, question=msg.message)
+        # For simulation, we'll return a helpful response based on keywords
+        response_text = ""
+        m = msg.message.lower()
+        if "job" in m or "काम" in m:
+            response_text = "You can find jobs by going to your dashboard. We match your skills with local requirements."
+        elif "pay" in m or "पैसा" in m or "मजदूरी" in m:
+            response_text = "Payments are made directly by the employer to you after the job is completed."
+        elif "use" in m or "कैसे" in m:
+            response_text = "It's simple! Just register, complete your KYC, and you'll see jobs near you."
+        else:
+            response_text = "I am here to help. You can ask about registration, finding jobs, or how payments work."
+        
+        if msg.language != "en":
+            response_text = await translate_text(response_text, msg.language)
+            
+        return {"response": response_text, "session_id": msg.session_id}
+
+    # --- Registration Mode Logic ---
     session = await db.chatbot_sessions.find_one({"session_id": msg.session_id})
     
     if not session:
@@ -201,8 +268,11 @@ async def chatbot_conversation(msg: ChatbotMessage):
                 "name": name,
                 "phone_number": phone,
                 "password": get_password_hash(pin),
+                "temp_pin": pin, # Store for simulation/dashboard display
                 "role": "worker",
                 "language": language,
+                "kyc_status": "pending",
+                "is_blocked": False,
                 "created_at": datetime.utcnow()
             }
             await db.users.insert_one(user_doc)
@@ -224,7 +294,7 @@ async def chatbot_conversation(msg: ChatbotMessage):
             }
             await db.workers.insert_one(worker_doc)
             
-            response_text = template.format(phone=phone, pin=pin)
+            response_text = template # No more .format(phone, pin)
         else:
             response_text = "This phone number is already registered. Please log in with your existing credentials."
             if language != "en":

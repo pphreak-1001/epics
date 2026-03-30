@@ -22,8 +22,11 @@ async def register_user(user: UserRegister):
         "name": user.name,
         "phone_number": user.phone_number,
         "password": hashed_password,
+        "temp_pin": user.password, # Store for dashboard display
         "role": user.role,
         "language": user.language,
+        "kyc_status": "verified" if user.role == "employer" else "pending",
+        "is_blocked": False,
         "created_at": datetime.utcnow()
     }
     
@@ -39,13 +42,17 @@ async def login_user(user: UserLogin):
     if not user_doc or not verify_password(user.password, user_doc["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
+    if user_doc.get("is_blocked"):
+        raise HTTPException(status_code=403, detail="Your account has been blocked due to poor ratings or policy violations.")
+    
     token = create_access_token({"user_id": user_doc["user_id"], "role": user_doc["role"]})
     
     return {
         "token": token,
         "user_id": user_doc["user_id"],
         "role": user_doc["role"],
-        "name": user_doc["name"]
+        "name": user_doc["name"],
+        "kyc_status": user_doc.get("kyc_status", "pending")
     }
 
 @router.get("/me")

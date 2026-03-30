@@ -1,77 +1,35 @@
-# Docker Compose for GraminRozgar
-# Separate Frontend and Backend Services
-# Run with: docker-compose up -d
+# Docker Compose for GraminRozgar (Unified Deployment)
+# Runs the combined Backend + Frontend container configured for production via Nginx
+# Run with: docker-compose up -d --build
 
 version: '3.8'
 
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:6.0
-    container_name: graminrozgar-mongodb
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    environment:
-      - MONGO_INITDB_DATABASE=graminrozgar
-    networks:
-      - graminrozgar-network
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Backend - FastAPI
-  backend:
+  # GraminRozgar App (Frontend + Backend + Nginx)
+  app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: graminrozgar-backend
+      args:
+        REACT_APP_BACKEND_URL: /api
+    container_name: graminrozgar-app
     restart: unless-stopped
     ports:
-      - "8001:8001"
+      # Expose on port 80 to map to domain name
+      - "80:80"
     environment:
-      - MONGO_URL=mongodb://mongodb:27017/graminrozgar
-      - JWT_SECRET=${JWT_SECRET:-graminrozgar_secret_key_2025}
-      - EMERGENT_LLM_KEY=${EMERGENT_LLM_KEY}
-    depends_on:
-      mongodb:
-        condition: service_healthy
+      # Hardcode your MongoDB Atlas connection string here
+      - MONGO_URL=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/graminrozgar?retryWrites=true&w=majority
+      - JWT_SECRET=graminrozgar_secret_key_2025
+      - OPENROUTER_API_KEY=your_openrouter_api_key_here
+      - SARVAM_API_KEY=your_sarvam_api_key_here
     networks:
       - graminrozgar-network
     healthcheck:
-      test: curl -f http://localhost:8001/api/health || exit 1
+      test: curl -f http://localhost/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
-
-  # Frontend - React with Nginx
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        REACT_APP_BACKEND_URL: http://localhost:8001
-    container_name: graminrozgar-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-    networks:
-      - graminrozgar-network
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost/health || exit 1
-      interval: 30s
-      timeout: 5s
-      retries: 3
-
-volumes:
-  mongodb_data:
-    driver: local
 
 networks:
   graminrozgar-network:
