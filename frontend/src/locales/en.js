@@ -129,7 +129,7 @@ const en = {
     wageMatch: "Wage Match",
     typeMatch: "Job Type Match",
     workerSkills: "Worker Skills",
-    listenDescription: "Listen to Job Description",,
+    listenDescription: "Listen to Job Description",
     cameraAccessDenied: "Please allow camera access to complete KYC.",
     verifyYourIdentity: "Verify Your Identity",
     kycSubtitle: "To keep our platform safe and trustworthy, please complete this quick verification.",

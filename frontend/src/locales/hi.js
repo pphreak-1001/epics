@@ -128,7 +128,7 @@ const hi = {
     wageMatch: "मजदूरी मिलान",
     typeMatch: "काम प्रकार मिलान",
     workerSkills: "मजदूर कौशल",
-    listenDescription: "काम का विवरण सुनें",,
+    listenDescription: "काम का विवरण सुनें",
     cameraAccessDenied: "Please allow camera access to complete KYC.",
     verifyYourIdentity: "Verify Your Identity",
     kycSubtitle: "To keep our platform safe and trustworthy, please complete this quick verification.",

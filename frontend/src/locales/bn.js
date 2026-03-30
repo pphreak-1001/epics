@@ -128,7 +128,7 @@ const bn = {
     wageMatch: "মজুরি মিল",
     typeMatch: "কাজের ধরন মিল",
     workerSkills: "শ্রমিক দক্ষতা",
-    listenDescription: "কাজের বিবরণ শুনুন",,
+    listenDescription: "কাজের বিবরণ শুনুন",
     cameraAccessDenied: "Please allow camera access to complete KYC.",
     verifyYourIdentity: "Verify Your Identity",
     kycSubtitle: "To keep our platform safe and trustworthy, please complete this quick verification.",
