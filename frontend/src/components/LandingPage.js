@@ -204,7 +204,7 @@ function LandingPage({ onLogin }) {
               <div className="absolute inset-0 bg-gradient-to-br from-heritage-green to-green-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-all"></div>
               <div className="relative bg-white rounded-3xl p-8 shadow-2xl border-2 border-heritage-green/20 hover:border-heritage-green transform hover:-translate-y-4 transition-all duration-300">
                 <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-heritage-green to-green-600 rounded-2xl shadow-xl flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all">
+                  <div className="w-16 h-16 bg-gradient-to-br from-heritage-green to-green-600 rounded-full shadow-xl flex items-center justify-center ring-4 ring-white/90 transition-all duration-300 group-hover:scale-110">
                     <FileText className="w-8 h-8 text-white" />
                   </div>
                 </div>
@@ -227,7 +227,7 @@ function LandingPage({ onLogin }) {
               <div className="absolute inset-0 bg-gradient-to-br from-saffron to-orange-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-all"></div>
               <div className="relative bg-white rounded-3xl p-8 shadow-2xl border-2 border-saffron/20 hover:border-saffron transform hover:-translate-y-4 transition-all duration-300">
                 <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-saffron to-orange-600 rounded-2xl shadow-xl flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all">
+                  <div className="w-16 h-16 bg-gradient-to-br from-saffron to-orange-600 rounded-full shadow-xl flex items-center justify-center ring-4 ring-white/90 transition-all duration-300 group-hover:scale-110">
                     <MessageSquare className="w-8 h-8 text-white" />
                   </div>
                 </div>
@@ -253,7 +253,7 @@ function LandingPage({ onLogin }) {
               <div className="absolute inset-0 bg-gradient-to-br from-indigo to-purple-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-all"></div>
               <div className="relative bg-white rounded-3xl p-8 shadow-2xl border-2 border-indigo/20 hover:border-indigo transform hover:-translate-y-4 transition-all duration-300">
                 <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo to-purple-600 rounded-2xl shadow-xl flex items-center justify-center rotate-12 group-hover:rotate-0 transition-all">
+                  <div className="w-16 h-16 bg-gradient-to-br from-indigo to-purple-600 rounded-full shadow-xl flex items-center justify-center ring-4 ring-white/90 transition-all duration-300 group-hover:scale-110">
                     <Mic className="w-8 h-8 text-white" />
                   </div>
                 </div>
